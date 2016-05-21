@@ -14,7 +14,45 @@ body{
 
 /* CONTENT 
 ======================== */
+.upvotes{
+	display: block;
+	color: #000;
+	text-decoration: none !important;
+}
+.vragenlijst{
+	list-style-type: none;
+	padding: 0;
 
+	li{
+		padding: 20px 0;
+		border-bottom: 1px solid #ccc;
+		h3{
+			margin: 0;
+			margin-bottom: 5px;
+		}
+
+		&:last-child{
+			border-bottom: 0;
+		}
+	}
+}
+.voting{
+	margin-bottom: 10px;
+	padding: 0;
+	list-style-type: none;
+	display: flex;
+
+	li{
+		padding: 0;
+		width: 30px;
+		border: none;
+		text-align: center;
+
+		&:first-child{
+			text-align: left;
+		}
+	}
+}
 /* FOOTER 
 ======================== */
 
