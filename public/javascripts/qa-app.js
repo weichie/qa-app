@@ -26,7 +26,7 @@ app.factory('questions', ['$http', function($http){
 	};
 
 	o.minOne = function(question) {
-		return $http.put('/question/' + question._id + '/upvote')
+		return $http.put('/question/' + question._id + '/downvote')
 		.success(function(data){
 			question.upvotes -= 1;
 		});

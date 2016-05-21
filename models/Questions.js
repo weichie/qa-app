@@ -13,4 +13,9 @@ QuestionSchema.methods.upvote = function(cb){
 	this.save(cb);
 }
 
+QuestionSchema.methods.downvote = function(cb){
+	this.upvotes -= 1;
+	this.save(cb);
+}
+
 mongoose.model('Question', QuestionSchema);

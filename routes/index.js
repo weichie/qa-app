@@ -53,4 +53,12 @@ router.put('/question/:question/upvote', function(req,res,next){
 	});
 });
 
+router.put('/question/:question/downvote', function(req,res,next){
+	req.question.downvote(function(err,question){
+		if(err){ return next(err); }
+
+		res.json(question);
+	});
+});
+
 module.exports = router;
