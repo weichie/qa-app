@@ -21,7 +21,7 @@ app.controller('MainCtrl', ['$scope', 'questions', function($scope, questions){
 	$scope.q = questions.questions;
 }]);
 
-app.controller('QuestionCtrl', ['$scope', function($scope){
+app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', function($scope,$stateParams,questions){
 	
 }]);
 
