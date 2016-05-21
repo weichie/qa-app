@@ -8,8 +8,11 @@ var http = require('http');
 var reload = require('reload');
 
 var mongoose = require('mongoose');
+var passport = require('passport');
 require('./models/Questions');
 require('./models/Answers');
+require('./models/Users');
+require('./config/passport');
 mongoose.connect('mongodb://localhost/qa');
 
 var routes = require('./routes/index');
@@ -28,6 +31,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(passport.initialize());
 
 app.use('/', routes);
 app.use('/users', users);
