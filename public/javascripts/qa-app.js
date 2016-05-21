@@ -48,6 +48,7 @@ app.controller('MainCtrl', ['$scope', 'questions', function($scope, questions){
 
 }]);
 
+
 app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', 'question', function($scope,$stateParams,questions,question){
 	
 	$scope.question = question;
@@ -67,7 +68,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 			}
 		})
 		.state('question', {
-			url: '/question/:id',
+			url: '/question/{id}',
 			templateUrl: '/question.html',
 			controller: 'QuestionCtrl',
 			resolve: {
