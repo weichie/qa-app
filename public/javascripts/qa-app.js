@@ -17,11 +17,18 @@ app.factory('questions', ['$http', function($http){
 	  });
 	};
 
+
 	o.plusOne = function(question) {
 		return $http.put('/question/' + question._id + '/upvote')
 		.success(function(data){
 			question.upvotes += 1;
 		});
+	};
+
+	o.create = function(question) {
+	  return $http.post('/question', question).success(function(data){
+	    o.questions.push(data);
+	  });
 	};
 
 	return o;
@@ -36,6 +43,18 @@ app.controller('MainCtrl', ['$scope', 'questions', function($scope, questions){
 	$scope.plusOne = function(question) {
 		questions.plusOne(question);
 	};
+
+	$scope.addQuestion = function(){
+		if(!$scope.title || $scope.title === '') { return; }
+
+		questions.create({
+			'title': $scope.title,
+			'link': $scope.link,
+		});
+
+		$scope.title = '';
+		$scope.link = '';
+	}
 
 }]);
 
