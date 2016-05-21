@@ -17,6 +17,12 @@ app.factory('questions', ['$http', function($http){
 	  });
 	};
 
+	o.create = function(question) {
+	  return $http.post('/question', question).success(function(data){
+	    o.questions.push(data);
+	  });
+	};
+
 	return o;
 }]);
 
@@ -25,6 +31,21 @@ app.controller('MainCtrl', ['$scope', 'questions', function($scope, questions){
 	
 	questions.getAll();
 	$scope.q = questions.questions;
+
+
+	$scope.addQuestion = function(){
+		if(!$scope.title || $scope.title === '') { return; }
+
+		questions.create({
+			'title': $scope.title,
+			'link': $scope.link,
+		});
+
+		$scope.title = '';
+		$scope.link = '';
+	}
+
+
 }]);
 
 app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', 'question', function($scope,$stateParams,questions,question){
