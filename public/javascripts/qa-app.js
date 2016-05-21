@@ -32,6 +32,20 @@ app.factory('questions', ['$http', function($http){
 		});
 	};
 
+	o.plusOneAnswer = function(question, answer) {
+		return $http.put('/question/' + question._id + '/answers/' + answer._id + '/upvote')
+		.success(function(data){
+			answer.upvotes += 1;
+		});
+	};
+
+	o.minOneAnswer = function(question, answer) {
+		return $http.put('/question/' + question._id + '/answers/' + answer._id + '/downvote')
+		.success(function(data){
+			answer.upvotes -= 1;
+		});
+	};
+
 	o.create = function(question) {
 	  return $http.post('/question', question).success(function(data){
 	    o.questions.push(data);
@@ -89,6 +103,14 @@ app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', 'question
 	  	$scope.question.answers.push(answer);
 	  });
 	  $scope.body = '';
+	};
+
+	$scope.plusOne = function(question, answer) {
+		questions.plusOneAnswer(question, answer);
+	};
+
+	$scope.minOne = function(question, answer) {
+		questions.minOneAnswer(question, answer);
 	};
 
 }]);

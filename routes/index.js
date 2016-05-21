@@ -95,7 +95,7 @@ router.put('/question/:question/answers/:answer/upvote', function(req,res,next){
 	req.answer.upvote(function(err,question){
 		if(err){ return next(err); }
 
-		res.json(answer);
+		res.json(question);
 	});
 });
 
@@ -113,7 +113,7 @@ router.put('/question/:question/answers/:answer/downvote', function(req,res,next
 	req.answer.downvote(function(err,question){
 		if(err){ return next(err); }
 
-		res.json(answer);
+		res.json(question);
 	});
 });
 

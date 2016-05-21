@@ -76,9 +76,22 @@
 
 
     <div ng-repeat="answer in question.answers | orderBy:'-upvotes'">
-      <span class="glyphicon glyphicon-thumbs-up"
-        ng-click="incrementUpvotes(answer)"></span>
-      {{answer.upvotes}} - by {{answer.author}}
+      <ul class="voting">
+            <li>{{ answer.upvotes }}</li>
+            <li>
+              <a href="/#/question/{{ question._id }}" ng-click="plusOne(question, answer)" class="upvotes">
+                <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+              </a>
+            </li>
+            <li>
+              <a href="/#/question/{{ question._id }}" ng-click="minOne(question, answer)" class="upvotes">
+                <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+              </a>
+            </li>
+          </ul>
+
+
+        - by {{answer.author}}
       <span style="font-size:20px; margin-left:10px;">
         {{answer.body}}
       </span>
