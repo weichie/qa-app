@@ -11,6 +11,12 @@ app.factory('questions', ['$http', function($http){
 		});
 	}
 
+	o.get = function(id) {
+	  return $http.get('/question/' + id).then(function(res){
+	    return res.data;
+	  });
+	};
+
 	return o;
 }]);
 
@@ -21,9 +27,11 @@ app.controller('MainCtrl', ['$scope', 'questions', function($scope, questions){
 	$scope.q = questions.questions;
 }]);
 
-app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', function($scope,$stateParams,questions){
-	//questions.getAll();
-	$scope.question = questions.questions[$stateParams.id];
+
+app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', 'question', function($scope,$stateParams,questions,question){
+	
+	$scope.question = question;
+
 }]);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){
@@ -41,7 +49,12 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 		.state('question', {
 			url: '/question/{id}',
 			templateUrl: '/question.html',
-			controller: 'QuestionCtrl'
+			controller: 'QuestionCtrl',
+			resolve: {
+				question: ['$stateParams', 'questions', function($stateParams, questions) {
+					return questions.get($stateParams.id);
+				}]
+			}
 		})
 
 	$urlRouterProvider.otherwise('home');
