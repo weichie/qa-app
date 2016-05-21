@@ -9,10 +9,34 @@
 /* CONTENT 
 ======================== */
 .upvotes {
-  border: 1px solid #000;
   display: block;
   color: #000;
   text-decoration: none !important; }
+
+.vragenlijst {
+  list-style-type: none;
+  padding: 0; }
+  .vragenlijst li {
+    padding: 20px 0;
+    border-bottom: 1px solid #ccc; }
+    .vragenlijst li h3 {
+      margin: 0;
+      margin-bottom: 5px; }
+    .vragenlijst li:last-child {
+      border-bottom: 0; }
+
+.voting {
+  margin-bottom: 10px;
+  padding: 0;
+  list-style-type: none;
+  display: flex; }
+  .voting li {
+    padding: 0;
+    width: 30px;
+    border: none;
+    text-align: center; }
+    .voting li:first-child {
+      text-align: left; }
 
 /* FOOTER 
 ======================== */

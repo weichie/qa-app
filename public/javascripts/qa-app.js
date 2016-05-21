@@ -25,6 +25,13 @@ app.factory('questions', ['$http', function($http){
 		});
 	};
 
+	o.minOne = function(question) {
+		return $http.put('/question/' + question._id + '/upvote')
+		.success(function(data){
+			question.upvotes -= 1;
+		});
+	};
+
 	o.create = function(question) {
 	  return $http.post('/question', question).success(function(data){
 	    o.questions.push(data);
@@ -42,6 +49,10 @@ app.controller('MainCtrl', ['$scope', 'questions', function($scope, questions){
 
 	$scope.plusOne = function(question) {
 		questions.plusOne(question);
+	};
+
+	$scope.minOne = function(question) {
+		questions.minOne(question);
 	};
 
 	$scope.addQuestion = function(){
