@@ -20,8 +20,9 @@ app.controller('MainCtrl', ['$scope', 'questions', function($scope, questions){
 	questions.getAll();
 	$scope.q = questions.questions;
 }]);
-app.controller('QuestionCtrl', ['$scope', function($scope){
 
+app.controller('QuestionCtrl', ['$scope', function($scope){
+	
 }]);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){
@@ -36,9 +37,9 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 				}]
 			}
 		})
-		.state('/question', {
-			url: 'discussion/{id}',
-			templateUrl: 'question.html',
+		.state('question', {
+			url: '/question/:id',
+			templateUrl: '/question.html',
 			controller: 'QuestionCtrl'
 		})
 

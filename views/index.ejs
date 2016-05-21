@@ -33,9 +33,10 @@
 	    	<h1>Vragen</h1>
 			<ul>
 				<li ng-repeat="quest in q">
-				<h4>{{ quest.title }}</h4>
-				<a href="{{ quest.link }}">{{quest.link}}</a><br>
-				{{ quest.body }}</li>
+					<h4><a href="/#/question/{{ quest._id }}">{{ quest.title }}</a></h4>
+					<a href="{{ quest.link }}">{{quest.link}}</a><br>
+					{{ quest.body }}
+				</li>
 			</ul>
 	    </div><!-- ./page-header -->
 
