@@ -4,7 +4,17 @@ var AnswerSchema = new mongoose.Schema({
 	body: String,
 	author: String,
 	upvotes: {type: Number, default: 0},
-	post: [{type: mongoose.Schema.Types.ObjectId, ref:'Question'}]
+	question: [{type: mongoose.Schema.Types.ObjectId, ref:'Question'}]
 });
+
+AnswerSchema.methods.upvote = function(cb){
+	this.upvotes += 1;
+	this.save(cb);
+}
+
+AnswerSchema.methods.downvote = function(cb){
+	this.upvotes -= 1;
+	this.save(cb);
+}
 
 mongoose.model('Answer', AnswerSchema);

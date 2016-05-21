@@ -5,7 +5,7 @@ var QuestionSchema = new mongoose.Schema({
 	body: String,
 	link: String,
 	upvotes: {type: Number, default: 0},
-	comments: [{type:mongoose.Schema.Types.ObjectId, ref:'Answer'}]
+	answers: [{type:mongoose.Schema.Types.ObjectId, ref:'Answer'}]
 });
 
 QuestionSchema.methods.upvote = function(cb){

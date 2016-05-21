@@ -38,6 +38,10 @@ app.factory('questions', ['$http', function($http){
 	  });
 	};
 
+	o.addComment = function(id, comment) {
+	  return $http.post('/question/' + id + '/answers', comment);
+	};
+
 	return o;
 }]);
 
@@ -73,6 +77,19 @@ app.controller('MainCtrl', ['$scope', 'questions', function($scope, questions){
 app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', 'question', function($scope,$stateParams,questions,question){
 	
 	$scope.question = question;
+
+	console.log($scope.question);
+
+	$scope.addComment = function(){
+	  if($scope.body === '') { return; }
+	  questions.addComment(question._id, {
+	  	body: $scope.body,
+	  	author: 'user',
+	  }).success(function(answer){
+	  	$scope.question.answers.push(answer);
+	  });
+	  $scope.body = '';
+	};
 
 }]);
 
