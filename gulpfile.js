@@ -7,6 +7,7 @@ var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var reload = require('reload');
 
 // Lint Task
 gulp.task('lint', function() {
@@ -22,6 +23,8 @@ gulp.task('sass', function() {
         .pipe(gulp.dest('public/stylesheets'));
 });
 
+
+
 // Concatenate & Minify JS
 /* gulp.task('scripts', function() {
     return gulp.src('js/*.js')
@@ -36,7 +39,7 @@ gulp.task('sass', function() {
 gulp.task('watch', function() {
     gulp.watch('public/javascripts/*.js', ['lint', 'scripts']);
     gulp.watch('public/sass/*.scss', ['sass']);
-    gulp.watch('views/*ejs', ['ejs']);
+    gulp.watch('views/*.ejs');
 });
 
 // Default Task
