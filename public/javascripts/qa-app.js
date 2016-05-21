@@ -11,6 +11,12 @@ app.factory('questions', ['$http', function($http){
 		});
 	}
 
+	o.get = function(id) {
+	  return $http.get('/question/' + id).then(function(res){
+	    return res.data;
+	  });
+	};
+
 	return o;
 }]);
 
