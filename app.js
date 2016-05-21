@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var http = require('http');
+var reload = require('reload');
 
 var mongoose = require('mongoose');
 require('./models/Questions');
@@ -61,5 +63,13 @@ app.use(function(err, req, res, next) {
   });
 });
 
-
 module.exports = app;
+
+//var server = http.createServer(app);
+
+//reload(server, app);
+
+/*server.listen(app.get('port'), function(){
+  console.log("Web server listening on port " + app.get('port'));
+});*/
+
