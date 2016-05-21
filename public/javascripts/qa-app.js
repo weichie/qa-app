@@ -22,7 +22,8 @@ app.controller('MainCtrl', ['$scope', 'questions', function($scope, questions){
 }]);
 
 app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', function($scope,$stateParams,questions){
-	
+	//questions.getAll();
+	$scope.question = questions.questions[$stateParams.id];
 }]);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){
@@ -38,7 +39,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 			}
 		})
 		.state('question', {
-			url: '/question/:id',
+			url: '/question/{id}',
 			templateUrl: '/question.html',
 			controller: 'QuestionCtrl'
 		})
