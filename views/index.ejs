@@ -34,6 +34,7 @@
 			<ul>
 				<li ng-repeat="quest in q">
 					<h4><a href="/#/question/{{ quest._id }}">{{ quest.title }}</a></h4>
+					<a href="#!" ng-click="plusOne(quest)" class="upvotes">{{ quest.upvotes }}</a>
 					<a href="{{ quest.link }}">{{quest.link}}</a><br>
 					{{ quest.body }}
 				</li>

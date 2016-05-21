@@ -8,6 +8,12 @@
 ======================== */
 /* CONTENT 
 ======================== */
+.upvotes {
+  border: 1px solid #000;
+  display: block;
+  color: #000;
+  text-decoration: none !important; }
+
 /* FOOTER 
 ======================== */
 /* RESPONSIVE 

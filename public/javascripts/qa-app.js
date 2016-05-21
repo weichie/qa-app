@@ -17,6 +17,13 @@ app.factory('questions', ['$http', function($http){
 	  });
 	};
 
+	o.plusOne = function(question) {
+		return $http.put('/question/' + question._id + '/upvote')
+		.success(function(data){
+			question.upvotes += 1;
+		});
+	};
+
 	return o;
 }]);
 
@@ -25,6 +32,11 @@ app.controller('MainCtrl', ['$scope', 'questions', function($scope, questions){
 	
 	questions.getAll();
 	$scope.q = questions.questions;
+
+	$scope.plusOne = function(question) {
+		questions.plusOne(question);
+	};
+
 }]);
 
 
