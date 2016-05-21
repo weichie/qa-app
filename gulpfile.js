@@ -23,8 +23,6 @@ gulp.task('sass', function() {
         .pipe(gulp.dest('public/stylesheets'));
 });
 
-
-
 // Concatenate & Minify JS
 /* gulp.task('scripts', function() {
     return gulp.src('js/*.js')
