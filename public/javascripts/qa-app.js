@@ -25,10 +25,10 @@ app.controller('MainCtrl', ['$scope', 'questions', function($scope, questions){
 	
 	questions.getAll();
 	$scope.q = questions.questions;
+}]);
 
-	console.log( $scope.q );
-
-	$scope.test = "Working! Uhu da werkt sup WEL? deze lolz - gkey! OKK22222eee nicergss :D";
+app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', function($scope,$stateParams,questions){
+	
 }]);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){
@@ -43,10 +43,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 				}]
 			}
 		})
-		.state('posts', {
-			url: '/posts/{id}',
-			templateUrl: '/posts.html',
-			controller: 'PostsCtrl'
+		.state('question', {
+			url: '/question/:id',
+			templateUrl: '/question.html',
+			controller: 'QuestionCtrl'
 		})
 
 	$urlRouterProvider.otherwise('home');
