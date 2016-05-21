@@ -33,7 +33,11 @@
 	    	<h1>Vragen</h1>
 			<ul class="vragenlijst">
 				<li ng-repeat="quest in q | orderBy: '-upvotes'">
-					<h3><a href="/#/question/{{ quest._id }}">{{ quest.title }}</a></h3>
+					<h3><a href="/#/question/{{ quest._id }}">{{ quest.title }}</a> 
+
+          <span>
+  <a href="#/question/{{ quest._id }}">Comments</a>
+</span></h3>
 					<ul class="voting">
 						<li>{{ quest.upvotes }}</li>
 						<li>
@@ -69,6 +73,43 @@
 			<h1>{{ question.title }}</h1>
       		<p>{{ question.body }}</p>
 		</div>
+
+
+    <div ng-repeat="answer in question.answers | orderBy:'-upvotes'">
+      <ul class="voting">
+            <li>{{ answer.upvotes }}</li>
+            <li>
+              <a href="/#/question/{{ question._id }}" ng-click="plusOne(question, answer)" class="upvotes">
+                <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+              </a>
+            </li>
+            <li>
+              <a href="/#/question/{{ question._id }}" ng-click="minOne(question, answer)" class="upvotes">
+                <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+              </a>
+            </li>
+          </ul>
+
+
+        - by {{answer.author}}
+      <span style="font-size:20px; margin-left:10px;">
+        {{answer.body}}
+      </span>
+    </div>
+
+
+    <form ng-submit="addComment()"
+    style="margin-top:30px;">
+    <h3>Add a new comment</h3>
+
+    <div class="form-group">
+      <input type="text"
+      class="form-control"
+      placeholder="Comment"
+      ng-model="body"></input>
+    </div>
+    <button type="submit" class="btn btn-primary">Post</button>
+  </form>
 	</script>
 
 	<script type="text/ng-template" id="/register.html">
