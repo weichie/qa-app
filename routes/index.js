@@ -19,6 +19,11 @@ router.get('/question', function(req,res,next){
 });
 
 router.post('/question', function(req,res,next){
+
+
+
+
+
 	var question = new Question(req.body);
 
 	question.save(function(err,question){
