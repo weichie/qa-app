@@ -71,23 +71,7 @@ header{
 	color: #000;
 	text-decoration: none !important;
 }
-.voting{
-	margin-bottom: 10px;
-	padding: 0;
-	list-style-type: none;
-	display: flex;
 
-	li{
-		padding: 0;
-		width: 30px;
-		border: none;
-		text-align: center;
-
-		&:first-child{
-			text-align: left;
-		}
-	}
-}
 .trending{
 	margin-bottom: 50px;
 	h2{
@@ -161,6 +145,55 @@ header{
 }
 
 .addQuestion{
+	.form-control{
+		border-radius: 0;
+	}
+}
+
+.answers{
+	padding: 5px 10px;
+	margin-bottom: 10px;
+	background: $light-grey;
+	
+	p 		{margin: 0;}
+
+	.author{
+		color: $dark-grey;
+		font-style: italic;
+
+		&::before{
+			content: 'commented by ';
+		}
+	}
+	.comment{
+		margin-top: 5px;
+		font-size: 1.2em;
+	}
+	.voting{
+		margin-bottom: 10px;
+		padding: 0;
+		list-style-type: none;
+		display: flex;
+		float: right;
+		width: 100px;
+
+		li{
+			padding: 0;
+			width: 30px;
+			border: none;
+			text-align: center;
+
+			&:first-child{
+				text-align: left;
+			}
+		}
+	}
+}
+
+.answer-form{
+	margin-top: 30px;
+	margin-bottom: 50px;
+	border-top: 1px solid $grey;
 
 	.form-control{
 		border-radius: 0;

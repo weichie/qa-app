@@ -51,19 +51,6 @@ header {
   color: #000;
   text-decoration: none !important; }
 
-.voting {
-  margin-bottom: 10px;
-  padding: 0;
-  list-style-type: none;
-  display: flex; }
-  .voting li {
-    padding: 0;
-    width: 30px;
-    border: none;
-    text-align: center; }
-    .voting li:first-child {
-      text-align: left; }
-
 .trending {
   margin-bottom: 50px; }
   .trending h2 {
@@ -116,6 +103,42 @@ header {
 
 .addQuestion .form-control {
   border-radius: 0; }
+
+.answers {
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  background: #fafafa; }
+  .answers p {
+    margin: 0; }
+  .answers .author {
+    color: #959595;
+    font-style: italic; }
+    .answers .author::before {
+      content: 'commented by '; }
+  .answers .comment {
+    margin-top: 5px;
+    font-size: 1.2em; }
+  .answers .voting {
+    margin-bottom: 10px;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    float: right;
+    width: 100px; }
+    .answers .voting li {
+      padding: 0;
+      width: 30px;
+      border: none;
+      text-align: center; }
+      .answers .voting li:first-child {
+        text-align: left; }
+
+.answer-form {
+  margin-top: 30px;
+  margin-bottom: 50px;
+  border-top: 1px solid #e7e7e7; }
+  .answer-form .form-control {
+    border-radius: 0; }
 
 /* FOOTER 
 ======================== */

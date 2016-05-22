@@ -132,7 +132,7 @@ router.put('/question/:question/upvote', auth, function(req,res,next){
 });
 
 // Upvote Answer of Question
-router.put('/question/:question/answers/:answer/upvote', function(req,res,next){
+router.put('/question/:question/answers/:answer/upvote', auth, function(req,res,next){
 	req.answer.upvote(function(err,question){
 		if(err){ return next(err); }
 
@@ -150,7 +150,7 @@ router.put('/question/:question/downvote', auth, function(req,res,next){
 });
 
 // Downvote Answer of Question
-router.put('/question/:question/answers/:answer/downvote', function(req,res,next){
+router.put('/question/:question/answers/:answer/downvote', auth, function(req,res,next){
 	req.answer.downvote(function(err,question){
 		if(err){ return next(err); }
 

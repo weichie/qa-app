@@ -170,8 +170,16 @@ app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', 'question
 
 	console.log($scope.question);
 
+	$scope.plusOne = function(question) {
+		questions.plusOne(question);
+	};
+
+	$scope.minOne = function(question) {
+		questions.minOne(question);
+	};
+
 	$scope.addComment = function(){
-	  if($scope.body === '') { return; }
+	  if(!$scope.body || $scope.body === '') { return; }
 	  questions.addComment(question._id, {
 	  	body: $scope.body,
 	  	author: 'user',
@@ -181,11 +189,11 @@ app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', 'question
 	  $scope.body = '';
 	};
 
-	$scope.plusOne = function(question, answer) {
+	$scope.plusOneAnswer = function(question, answer) {
 		questions.plusOneAnswer(question, answer);
 	};
 
-	$scope.minOne = function(question, answer) {
+	$scope.minOneAnswer = function(question, answer) {
 		questions.minOneAnswer(question, answer);
 	};
 }]);
