@@ -45,7 +45,9 @@
 	</header>
 
 	<div class="content container">
-    	<ui-view></ui-view>
+		<div class="col-xs-12 col-md-8 main-content">
+    		<ui-view></ui-view>
+    	</div><!-- ./main-content -->
 	</div><!-- ./content container -->
 
     <!-- Scriptzz -->
@@ -55,16 +57,14 @@
 
 
     <script type="text/ng-template" id="/home.html">
-	    <div class="page-header">
-	    	<h1>Vragen - {{ username }} - <a href="#" ng-click="logout()" ng-show="isLoggedIn">Logout</a> <a href="#/login" ng-hide="isLoggedIn">Login</a></h1>
+    	<section class="trending">
+	    	<h2>Trending questions <span class="pull-right">top 10 questions</span></h2>
 			<ul class="vragenlijst">
 				<li ng-repeat="quest in q | orderBy: '-upvotes'">
 					<h3>
 						<a href="/#/question/{{ quest._id }}">{{ quest.title }}</a>
-						<span ng-show="post.author">
-  							posted by <a>{{post.author}}</a> |
-						</span>
 					</h3>
+					<!--
 					<ul class="voting">
 						<li>{{ quest.upvotes }}</li>
 						<li>
@@ -80,9 +80,44 @@
 					</ul>
 					<a href="{{ quest.link }}">{{quest.link}}</a><br>
 					{{ quest.body }}
+					-->
 				</li>
 			</ul>
-	    </div><!-- ./page-header -->
+		</section><!-- ./trending -->
+
+		<section class="latest">
+	    	<h2>Latest questions <a href="#!" class="pull-right">see all <i class="fa fa-angle-double-right"></i></a></h2>
+			<ul class="vragenlijst">
+				<li ng-repeat="quest in q | orderBy: '-upvotes'">
+					<h3>
+						<a href="/#/question/{{ quest._id }}">{{ quest.title }}</a>
+					</h3>
+					<p>
+						By Weichie &middot; 119 comments &middot; <span class="orange">1 minute ago</span>
+					</p>
+					<span ng-show="post.author">
+							posted by <a>{{post.author}}</a> |
+					</span>
+					<!--
+					<ul class="voting">
+						<li>{{ quest.upvotes }}</li>
+						<li>
+							<a href="#!" ng-click="plusOne(quest)" class="upvotes">
+								<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+							</a>
+						</li>
+						<li>
+							<a href="#!" ng-click="minOne(quest)" class="upvotes">
+								<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+							</a>
+						</li>
+					</ul>
+					<a href="{{ quest.link }}">{{quest.link}}</a><br>
+					{{ quest.body }}
+					-->
+				</li>
+			</ul>
+		</section><!-- ./trending -->
 
 		<form class="form-inline" ng-show="isLoggedIn()" ng-submit="addQuestion()">
 			<div class="form-group">
