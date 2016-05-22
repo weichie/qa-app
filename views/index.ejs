@@ -17,7 +17,7 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
 
 	<script src="/javascripts/qa-app.js"></script>
-    </head>
+</head>
 <body>
 	<header>
 		<nav class="navbar navbar-default" ng-controller="NavCtrl">
@@ -66,19 +66,6 @@
 						<a href="/#/question/{{ quest._id }}">{{ quest.title }}</a>
 					</h3>
 					<!--
-					<ul class="voting">
-						<li>{{ quest.upvotes }}</li>
-						<li>
-							<a href="#!" ng-click="plusOne(quest)" class="upvotes">
-								<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-							</a>
-						</li>
-						<li>
-							<a href="#!" ng-click="minOne(quest)" class="upvotes">
-								<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
-							</a>
-						</li>
-					</ul>
 					<a href="{{ quest.link }}">{{quest.link}}</a><br>
 					{{ quest.body }}
 					-->
@@ -119,54 +106,52 @@
 				</li>
 			</ul>
 		</section><!-- ./trending -->
-
-		<form class="form-inline" ng-show="isLoggedIn()" ng-submit="addQuestion()">
-			<div class="form-group">
-				<input type="text" class="form-control" ng-model="title" placeholder="title">
-			</div>
-			<div class="form-group">
-				<input type="text" class="form-control" ng-model="link" placeholder="link">
-			</div>
-			<button type="submit" class="btn btn-primary btn-sm">add post</button>
-		</form>
-
-		<div ng-hide="isLoggedIn()">
-			<h3>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can add a question.</h3>
-		</div>
 	</script>
 
 	<script type="text/ng-template" id="/question.html">
 		<div class="page-header">
 			<h1>{{ question.title }}</h1>
       		<p>{{ question.body }}</p>
-		</div>
 
-		<div ng-repeat="answer in question.answers | orderBy:'-upvotes'">
-			<ul class="voting">
-				<li>{{ answer.upvotes }}</li>
+      		<p>Was this a good question?</p>
+      		<ul class="voting">
+				<li>{{ question.upvotes }}</li>
 				<li>
-					<a href="/#/question/{{ question._id }}" ng-click="plusOne(question, answer)" class="upvotes">
+					<a href="/#/question/{{ question._id }}" ng-click="plusOne(question)" class="upvotes">
 						<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
 					</a>
 				</li>
 				<li>
-					<a href="/#/question/{{ question._id }}" ng-click="minOne(question, answer)" class="upvotes">
+					<a href="/#/question/{{ question._id }}" ng-click="minOne(question)" class="upvotes">
 						<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
 					</a>
 				</li>
 			</ul>
-
-			- by {{answer.author}}
-			<span style="font-size:20px; margin-left:10px;">
-				{{answer.body}}
-			</span>
 		</div>
 
-    	<form ng-submit="addComment()" ng-show="isLoggedIn()" style="margin-top:30px;">
+		<div class="answers" ng-repeat="answer in question.answers | orderBy:'-upvotes'">
+			<ul class="voting">
+				<li>{{ answer.upvotes }}</li>
+				<li>
+					<a href="/#/question/{{ question._id }}" ng-click="plusOneAnswer(question, answer)" class="upvotes">
+						<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+					</a>
+				</li>
+				<li>
+					<a href="/#/question/{{ question._id }}" ng-click="minOneAnswer(question, answer)" class="upvotes">
+						<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+					</a>
+				</li>
+			</ul>
+			<p class="author">{{answer.author}}</p>
+			<p class="comment">{{answer.body}}</p>
+		</div>
+
+    	<form ng-submit="addComment()" class="answer-form" ng-show="isLoggedIn()">
     		<h3>Add a new comment</h3>
 
     		<div class="form-group">
-    			<input type="text" class="form-control" placeholder="Comment" ng-model="body"></input>
+    			<input type="text" class="form-control" placeholder="Write your comment" ng-model="body"></input>
     		</div>
     		<button type="submit" class="btn btn-primary">Post</button>
 		</form>
@@ -245,5 +230,6 @@
 
       <script src="/socket.io/socket.io.js"></script>
     <script src="/javascripts/socket.js"></script>
+
 </body>
 </html>
