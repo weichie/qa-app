@@ -35,6 +35,21 @@ io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     console.log('got message: ' + msg);
   });
+
+  /*socket.on('changedQuestion', function(question){
+    console.log('someone changed a question');
+    console.log(question);
+  });*/
+
+  socket.on('changedQuestion', function(question){
+    // Send to all other sockets...
+    socket.broadcast.emit('changedQuestion', question);
+  });
+
+  socket.on('pushQuestions', function(){
+    socket.broadcast.emit('pushQuestions');
+  });
+
 });
 
 // view engine setup

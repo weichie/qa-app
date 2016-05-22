@@ -9,8 +9,6 @@ var User = mongoose.model('User');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 
-console.log(auth);
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -117,6 +115,7 @@ router.param('answer', function(req,res,next,id){
 
 // Return single Question (with comments :)
 router.get('/question/:question', function(req,res){
+
 	req.question.populate('answers', function(err, question){
 		if( err ) { return next(err); }
 		res.json(question);
@@ -125,6 +124,7 @@ router.get('/question/:question', function(req,res){
 
 
 router.put('/question/:question/upvote', auth, function(req,res,next){
+
 	req.question.upvote(function(err,question){
 		if(err){ return next(err); }
 

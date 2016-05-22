@@ -1,75 +1,5 @@
 var app = angular.module('qaApp', ['ui.router']);
 
-app.factory('questions', ['$http', 'auth', function($http, auth){
-	var o = {
-		questions: []
-	};
-
-	o.getAll = function(){
-		return $http.get('/question').success(function(data){
-			angular.copy(data,o.questions);
-		});
-	}
-
-	o.get = function(id) {
-	  return $http.get('/question/' + id).then(function(res){
-	    return res.data;
-	  });
-	};
-
-	o.plusOne = function(question) {
-		//return $http.put('/question/' + question._id + '/upvote', null, {
-		return $http.put('/question/' + question._id + '/upvote', {
-			headers: {Authorization: 'Bearer ' + auth.getToken()}
-		}).success(function(data){
-			question.upvotes += 1;
-		});
-	};
-
-	o.minOne = function(question) {
-		//return $http.put('/question/' + question._id + '/downvote', null, {
-		return $http.put('/question/' + question._id + '/downvote', {
-			headers: {Authorization: 'Bearer ' + auth.getToken()}
-		}).success(function(data){
-			question.upvotes -= 1;
-		});
-	};
-
-	o.plusOneAnswer = function(question, answer) {
-		//return $http.put('/question/' + question._id + '/answers/' + answer._id + '/upvote', null, {
-		return $http.put('/question/' + question._id + '/answers/' + answer._id + '/upvote', {
-			headers: {Authorization: 'Bearer ' + auth.getToken()}
-		}).success(function(data){
-			answer.upvotes += 1;
-		});
-	};
-
-	o.minOneAnswer = function(question, answer) {
-		//return $http.put('/question/' + question._id + '/answers/' + answer._id + '/downvote', null, {
-		return $http.put('/question/' + question._id + '/answers/' + answer._id + '/downvote', {
-			headers: {Authorization: 'Bearer ' + auth.getToken()}
-		}).success(function(data){
-			answer.upvotes -= 1;
-		});
-	};
-
-	o.create = function(question) {
-	  return $http.post('/question', question, {
-	  	headers: {Authorization: 'Bearer ' + auth.getToken()}
-	  }).success(function(data){
-	    o.questions.push(data);
-	  });
-	};
-
-	o.addComment = function(id, comment) {
-	  return $http.post('/question/' + id + '/answers', comment, {
-	  	headers: {Authorization: 'Bearer ' + auth.getToken()}
-	  });
-	};
-
-	return o;
-}]);
-
 app.factory('auth', ['$http','$window', function($http,$window){
 	var auth = {};
 
@@ -98,6 +28,7 @@ app.factory('auth', ['$http','$window', function($http,$window){
 			var payload = JSON.parse($window.atob(token.split('.')[1]));
 
 			return payload.username;
+
 		}
 	};
 
@@ -120,7 +51,77 @@ app.factory('auth', ['$http','$window', function($http,$window){
 	return auth;
 }]);
 
-app.controller('MainCtrl', ['$scope', 'questions', 'auth', function($scope, questions, auth){
+app.factory('questions', ['$http', 'auth', function($http, auth){
+	var o = {
+		questions: []
+	};
+
+	o.getAll = function(){
+		return $http.get('/question').success(function(data){
+			angular.copy(data,o.questions);
+		});
+	}
+
+	o.get = function(id) {
+	  return $http.get('/question/' + id).then(function(res){
+	    return res.data;
+	  });
+	};
+
+	o.plusOne = function(question) {
+		//return $http.put('/question/' + question._id + '/upvote', null, {
+		return $http.put('/question/' + question._id + '/upvote', null, {
+			headers: {Authorization: 'Bearer ' + auth.getToken()}
+		}).success(function(data){
+			question.upvotes += 1;
+		});
+	};
+
+	o.minOne = function(question) {
+		//return $http.put('/question/' + question._id + '/downvote', null, {
+		return $http.put('/question/' + question._id + '/downvote', null, {
+			headers: {Authorization: 'Bearer ' + auth.getToken()}
+		}).success(function(data){
+			question.upvotes -= 1;
+		});
+	};
+
+	o.plusOneAnswer = function(question, answer) {
+		//return $http.put('/question/' + question._id + '/answers/' + answer._id + '/upvote', null, {
+		return $http.put('/question/' + question._id + '/answers/' + answer._id + '/upvote', null, {
+			headers: {Authorization: 'Bearer ' + auth.getToken()}
+		}).success(function(data){
+			answer.upvotes += 1;
+		});
+	};
+
+	o.minOneAnswer = function(question, answer) {
+		//return $http.put('/question/' + question._id + '/answers/' + answer._id + '/downvote', null, {
+		return $http.put('/question/' + question._id + '/answers/' + answer._id + '/downvote', null, {
+			headers: {Authorization: 'Bearer ' + auth.getToken()}
+		}).success(function(data){
+			answer.upvotes -= 1;
+		});
+	};
+
+	o.create = function(question) {
+	  return $http.post('/question', question, {
+	  	headers: {Authorization: 'Bearer ' + auth.getToken()}
+	  }).success(function(data){
+	    o.questions.push(data);
+	  });
+	};
+
+	o.addComment = function(id, comment) {
+	  return $http.post('/question/' + id + '/answers', comment, {
+	  	headers: {Authorization: 'Bearer ' + auth.getToken()}
+	  });
+	};
+
+	return o;
+}]);
+
+app.controller('MainCtrl', ['$scope', 'questions', 'auth', '$window', function($scope, questions, auth, $window){
 	//$scope.questions = questions.questions;
 	
 	questions.getAll();
@@ -150,6 +151,14 @@ app.controller('MainCtrl', ['$scope', 'questions', 'auth', function($scope, ques
 		$scope.username = auth.currentUser();
 	}
 
+	// Server broadcasted back that vote has been cast on a question
+	$window.socket.on('pushQuestions', function(){
+		questions.getAll().then(function(data){
+			console.log( data );
+			$scope.q = data.data;
+		});
+	});
+
 	$scope.logout = function(){
 		auth.logout();
 	};
@@ -162,7 +171,7 @@ app.controller('MainCtrl', ['$scope', 'questions', 'auth', function($scope, ques
 	console.log( auth.isLoggedIn() );
 }]);
 
-app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', 'question', 'auth', function($scope,$stateParams,questions,question, auth){
+app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions', 'question', 'auth', function($scope, $window, $stateParams,questions,question, auth){
 	
 	$scope.question = question;
 	$scope.isLoggedIn = auth.isLoggedIn;
@@ -170,12 +179,35 @@ app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', 'question
 
 	console.log($scope.question);
 
+	// When entering the question page we want to check if there are any changes (via socket.io)
+	$window.socket.on('changedQuestion', function(q){
+		console.log('seems that someone changed this question...');
+		console.log(' man man man ');
+		console.log(q);
+
+		questions.get( question._id ).then(function(data){
+			console.log( data );
+			$scope.question = data;
+		});
+
+		//$scope.$apply();
+		
+	});
+
 	$scope.plusOne = function(question) {
+
+		$window.socket.emit('changedQuestion', question);
+		$window.socket.emit('pushQuestions', question);
 		questions.plusOne(question);
+
 	};
 
 	$scope.minOne = function(question) {
+
+		$window.socket.emit('changedQuestion', question);
+		$window.socket.emit('pushQuestions', question);
 		questions.minOne(question);
+		
 	};
 
 	$scope.addComment = function(){
@@ -184,17 +216,27 @@ app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', 'question
 	  	body: $scope.body,
 	  	author: 'user',
 	  }).success(function(answer){
+	  	// We push our answer to the current scope.
 	  	$scope.question.answers.push(answer);
+	  	// Send out an emit
+	  	$window.socket.emit('changedQuestion', question);
+
 	  });
 	  $scope.body = '';
 	};
 
 	$scope.plusOneAnswer = function(question, answer) {
+
+		$window.socket.emit('changedQuestion', question);
 		questions.plusOneAnswer(question, answer);
+		
 	};
 
 	$scope.minOneAnswer = function(question, answer) {
+
+		$window.socket.emit('changedQuestion', question);
 		questions.minOneAnswer(question, answer);
+		
 	};
 }]);
 
@@ -210,6 +252,8 @@ app.controller('AddqCtrl', ['$scope', 'questions', 'auth' , function($scope, que
 			'link': $scope.link,
 			'body': $scope.body
 		});
+
+		$window.socket.emit('pushQuestions');
 
 		$scope.title = '';
 		$scope.link = '';
