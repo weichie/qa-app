@@ -9,6 +9,7 @@ var User = mongoose.model('User');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 
+console.log(auth);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -72,7 +73,7 @@ router.post('/login', function(req,res,next){
 });
 
 // Post Answer to Question
-router.post('/question/:question/answers', function(req, res, next) {
+router.post('/question/:question/answers', auth, function(req, res, next) {
   var anwser = new Answer(req.body);
   anwser.question = req.question;
 
@@ -132,7 +133,7 @@ router.put('/question/:question/upvote', auth, function(req,res,next){
 });
 
 // Upvote Answer of Question
-router.put('/question/:question/answers/:answer/upvote', function(req,res,next){
+router.put('/question/:question/answers/:answer/upvote', auth, function(req,res,next){
 	req.answer.upvote(function(err,question){
 		if(err){ return next(err); }
 
@@ -150,7 +151,7 @@ router.put('/question/:question/downvote', auth, function(req,res,next){
 });
 
 // Downvote Answer of Question
-router.put('/question/:question/answers/:answer/downvote', function(req,res,next){
+router.put('/question/:question/answers/:answer/downvote', auth, function(req,res,next){
 	req.answer.downvote(function(err,question){
 		if(err){ return next(err); }
 
