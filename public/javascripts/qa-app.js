@@ -121,6 +121,27 @@ app.factory('questions', ['$http', 'auth', function($http, auth){
 	return o;
 }]);
 
+app.factory('isImg', function($img) {
+    return {
+        isImage: function(src) {
+        
+            var deferred = $img.defer();
+        
+            var image = new Image();
+            image.onerror = function() {
+                deferred.resolve(false);
+            };
+            image.onload = function() {
+                deferred.resolve(true);
+            };
+            image.src = src;
+        
+            return deferred.promise;
+        }
+    };
+});
+/* http://stackoverflow.com/questions/22423057/angular-js-isimage-check-if-its-image-by-url */
+
 app.controller('MainCtrl', ['$scope', 'questions', 'auth', '$window', function($scope, questions, auth, $window){
 	//$scope.questions = questions.questions;
 	

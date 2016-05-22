@@ -74,7 +74,7 @@
 		</section><!-- ./trending -->
 
 		<section class="latest">
-	    	<h2>Latest questions <a href="#!" class="pull-right">see all <i class="fa fa-angle-double-right"></i></a></h2>
+	    	<h2>Close by <a href="#!" class="pull-right">see all <i class="fa fa-angle-double-right"></i></a></h2>
 			<ul class="vragenlijst">
 				<li ng-repeat="quest in q">
 					<h3>
@@ -106,6 +106,40 @@
 				</li>
 			</ul>
 		</section><!-- ./trending -->
+
+		<section class="latest">
+	    	<h2>Latest questions <a href="#!" class="pull-right">see all <i class="fa fa-angle-double-right"></i></a></h2>
+			<ul class="vragenlijst">
+				<li ng-repeat="quest in q">
+					<h3>
+						<a href="/#/question/{{ quest._id }}">{{ quest.title }}</a>
+					</h3>
+					<p>
+						By Weichie &middot; 119 comments &middot; <span class="orange">1 minute ago</span>
+					</p>
+					<span ng-show="post.author">
+							posted by <a>{{post.author}}</a> |
+					</span>
+					<!--
+					<ul class="voting">
+						<li>{{ quest.upvotes }}</li>
+						<li>
+							<a href="#!" ng-click="plusOne(quest)" class="upvotes">
+								<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+							</a>
+						</li>
+						<li>
+							<a href="#!" ng-click="minOne(quest)" class="upvotes">
+								<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+							</a>
+						</li>
+					</ul>
+					<a href="{{ quest.link }}">{{quest.link}}</a><br>
+					{{ quest.body }}
+					-->
+				</li>
+			</ul>
+		</section><!-- ./latest -->
 	</script>
 
 	<script type="text/ng-template" id="/question.html">
@@ -113,8 +147,8 @@
 			<h1>{{ question.title }}</h1>
       		<p>{{ question.body }}</p>
 
-      		<p>Was this a good question?</p>
-      		<ul class="voting">
+      		<p class="good-question">Was this a good question?</p>
+      		<ul class="question-vote">
 				<li>{{ question.upvotes }}</li>
 				<li>
 					<a href="/#/question/{{ question._id }}" ng-click="plusOne(question)" class="upvotes">
@@ -186,10 +220,6 @@
 	</script>
 
 	<script type="text/ng-template" id="/register.html">
-		<div class="page-header">
-			<h1>Registratie</h1>
-		</div>
-
 		<div ng-show="error" class="alert alert-danger row">
 			<span>{{ error.message }}</span>
 		</div>
@@ -225,7 +255,7 @@
 		</form>
 	</script>
 
-      <script src="/socket.io/socket.io.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
     <script src="/javascripts/socket.js"></script>
 
 </body>
