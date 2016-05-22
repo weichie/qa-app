@@ -190,6 +190,25 @@ app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', 'question
 	};
 }]);
 
+app.controller('AddqCtrl', ['$scope', 'questions', 'auth' , function($scope, questions, auth){
+	$scope.q = questions.questions;
+	$scope.isLoggedIn = auth.isLoggedIn;
+
+	$scope.addQuestion = function(){
+		if(!$scope.title || $scope.title === '') { return; }
+
+		questions.create({
+			'title': $scope.title,
+			'link': $scope.link,
+			'body': $scope.body
+		});
+
+		$scope.title = '';
+		$scope.link = '';
+		$scope.body = '';
+	}
+}]);
+
 app.controller('AuthCtrl', ['$scope','$state','auth', function($scope,$state,auth){
 	$scope.user = {};
 
@@ -237,6 +256,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 					return questions.get($stateParams.id);
 				}]
 			}
+		})
+		.state('addQuestion', {
+			url: '/addQuestion',
+			templateUrl: '/addQuestion.html',
+			controller: 'AddqCtrl'
 		})
 		.state('login', {
 			url: '/login',
