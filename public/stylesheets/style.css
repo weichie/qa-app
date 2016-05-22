@@ -4,26 +4,52 @@
 ======================== */
 /* MAIN 
 ======================== */
+body {
+  font-family: Arial;
+  color: #212121; }
+
+a {
+  color: #024999; }
+  a:hover {
+    color: #024999; }
+
+.camelCase {
+  text-transform: capitalize; }
+
+.orange {
+  color: #ba4b13; }
+
+h1 {
+  margin-top: 0;
+  margin-bottom: 20px; }
+
 /* HEADER 
 ======================== */
+header {
+  margin-bottom: 50px; }
+  header .navbar {
+    margin: 0;
+    background: #e7e7e7;
+    border-bottom: 1px solid #ff7200; }
+  header .navbar-brand {
+    text-transform: uppercase;
+    font-weight: 800;
+    color: #3d0000 !important; }
+  header .navbar-collapse a {
+    color: #3d0000 !important; }
+  header .navbar-collapse ul.navbar-right {
+    font-weight: 400; }
+    header .navbar-collapse ul.navbar-right li:first-child {
+      text-transform: uppercase;
+      font-size: 0.9em;
+      font-weight: 800; }
+
 /* CONTENT 
 ======================== */
 .upvotes {
   display: block;
   color: #000;
   text-decoration: none !important; }
-
-.vragenlijst {
-  list-style-type: none;
-  padding: 0; }
-  .vragenlijst li {
-    padding: 20px 0;
-    border-bottom: 1px solid #ccc; }
-    .vragenlijst li h3 {
-      margin: 0;
-      margin-bottom: 5px; }
-    .vragenlijst li:last-child {
-      border-bottom: 0; }
 
 .voting {
   margin-bottom: 10px;
@@ -37,6 +63,59 @@
     text-align: center; }
     .voting li:first-child {
       text-align: left; }
+
+.trending {
+  margin-bottom: 50px; }
+  .trending h2 {
+    text-transform: uppercase;
+    font-size: 1.2em;
+    margin: 0;
+    font-weight: 800; }
+    .trending h2 .pull-right {
+      color: #959595;
+      font-weight: 400;
+      font-size: 0.8em; }
+  .trending ul {
+    margin-top: 5px;
+    list-style-type: none;
+    padding: 5px 0;
+    background: #fafafa; }
+    .trending ul li {
+      padding: 5px 10px; }
+      .trending ul li h3 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.1em; }
+
+.latest {
+  margin-bottom: 50px; }
+  .latest h2 {
+    text-transform: uppercase;
+    font-size: 1.2em;
+    margin: 0;
+    font-weight: 800; }
+    .latest h2 .pull-right {
+      color: #959595;
+      font-weight: 400;
+      font-size: 0.8em; }
+  .latest ul {
+    margin-top: 5px;
+    list-style-type: none;
+    padding: 5px 0;
+    background: #fafafa; }
+    .latest ul li {
+      padding: 5px 10px; }
+      .latest ul li h3 {
+        margin: 0;
+        font-weight: 400;
+        font-size: 1.1em; }
+      .latest ul li p {
+        margin: 1px 0;
+        font-size: 0.9em;
+        color: #959595; }
+
+.addQuestion .form-control {
+  border-radius: 0; }
 
 /* FOOTER 
 ======================== */
