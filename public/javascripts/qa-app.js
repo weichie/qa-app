@@ -59,7 +59,7 @@ app.factory('questions', ['$http', function($http){
 	return o;
 }]);
 
-app.factory('auth', ['$http','$windows', function($http,$windows){
+app.factory('auth', ['$http','$window', function($http,$window){
 	var auth = {};
 
 	auth.saveToken = function(token){
@@ -97,7 +97,7 @@ app.factory('auth', ['$http','$windows', function($http,$windows){
 	};
 
 	auth.logIn = function(user){
-		return $http.post('/login', user).succes(function(data){
+		return $http.post('/login', user).success(function(data){
 			auth.saveToken(data.token);
 		});
 	};
@@ -109,7 +109,7 @@ app.factory('auth', ['$http','$windows', function($http,$windows){
 	return auth;
 }]);
 
-app.controller('MainCtrl', ['$scope', 'questions', function($scope, questions){
+app.controller('MainCtrl', ['$scope', 'questions', 'auth', function($scope, questions, auth){
 	//$scope.questions = questions.questions;
 	
 	questions.getAll();
@@ -134,6 +134,20 @@ app.controller('MainCtrl', ['$scope', 'questions', function($scope, questions){
 		$scope.title = '';
 		$scope.link = '';
 	}
+
+	if( auth.isLoggedIn() ){
+		$scope.username = auth.currentUser();
+	}
+
+	$scope.logout = function(){
+		auth.logout();
+	};
+
+	$scope.isLoggedIn = auth.isLoggedIn();
+
+	console.log( auth.getToken() );
+	console.log( auth.currentUser() );
+	console.log( auth.isLoggedIn() );
 
 }]);
 
@@ -165,7 +179,7 @@ app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', 'question
 
 }]);
 
-app.controller('AuthCtrl', ['$scope','$state','$auth', function($scope,$state,$auth){
+app.controller('AuthCtrl', ['$scope','$state','auth', function($scope,$state,auth){
 	$scope.user = {};
 
 	$scope.register = function(){

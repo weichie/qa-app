@@ -30,7 +30,7 @@
 
     <script type="text/ng-template" id="/home.html">
 	    <div class="page-header">
-	    	<h1>Vragen</h1>
+	    	<h1>Vragen - {{ username }} - <a href="#" ng-click="logout()" ng-show="isLoggedIn">Logout</a> <a href="#/login" ng-hide="isLoggedIn">Login</a></h1>
 			<ul class="vragenlijst">
 				<li ng-repeat="quest in q | orderBy: '-upvotes'">
 					<h3><a href="/#/question/{{ quest._id }}">{{ quest.title }}</a> 
