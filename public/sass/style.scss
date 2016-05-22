@@ -1,17 +1,40 @@
 /* VARIABLES 
 ======================== */
+$light-grey: 		#e7e7e7;
+$orange: 			#ff7200;
+$bordeaux: 			#3d0000;
+$black: 			#212121;
+$link-blue: 		#024999;
 
 /* MIXIN 
 ======================== */
 
 /* MAIN 
 ======================== */
-body{
-	
-}
+body			{font-family: Arial;}
+a 				{color: $link-blue;}
+.camelCase 		{text-transform: capitalize;}
+
 /* HEADER 
 ======================== */
+header{
 
+	.navbar{
+		margin: 0;
+		background: $light-grey;
+		border-bottom: 1px solid $orange;
+	}
+	.navbar-brand{
+		text-transform: uppercase;
+		font-weight: 800;
+		color: $bordeaux !important;
+	}
+	.navbar-collapse{
+		a{
+			color: $bordeaux !important;
+		}
+	}
+}
 /* CONTENT 
 ======================== */
 .upvotes{

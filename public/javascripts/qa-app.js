@@ -1,6 +1,6 @@
 var app = angular.module('qaApp', ['ui.router']);
 
-app.factory('questions', ['$http', function($http){
+app.factory('questions', ['$http', 'auth', function($http, auth){
 	var o = {
 		questions: []
 	};
@@ -17,43 +17,54 @@ app.factory('questions', ['$http', function($http){
 	  });
 	};
 
-
 	o.plusOne = function(question) {
-		return $http.put('/question/' + question._id + '/upvote')
-		.success(function(data){
+		//return $http.put('/question/' + question._id + '/upvote', null, {
+		return $http.put('/question/' + question._id + '/upvote', {
+			headers: {Authorization: 'Bearer ' + auth.getToken()}
+		}).success(function(data){
 			question.upvotes += 1;
 		});
 	};
 
 	o.minOne = function(question) {
-		return $http.put('/question/' + question._id + '/downvote')
-		.success(function(data){
+		//return $http.put('/question/' + question._id + '/downvote', null, {
+		return $http.put('/question/' + question._id + '/downvote', {
+			headers: {Authorization: 'Bearer ' + auth.getToken()}
+		}).success(function(data){
 			question.upvotes -= 1;
 		});
 	};
 
 	o.plusOneAnswer = function(question, answer) {
-		return $http.put('/question/' + question._id + '/answers/' + answer._id + '/upvote')
-		.success(function(data){
+		//return $http.put('/question/' + question._id + '/answers/' + answer._id + '/upvote', null, {
+		return $http.put('/question/' + question._id + '/answers/' + answer._id + '/upvote', {
+			headers: {Authorization: 'Bearer ' + auth.getToken()}
+		}).success(function(data){
 			answer.upvotes += 1;
 		});
 	};
 
 	o.minOneAnswer = function(question, answer) {
-		return $http.put('/question/' + question._id + '/answers/' + answer._id + '/downvote')
-		.success(function(data){
+		//return $http.put('/question/' + question._id + '/answers/' + answer._id + '/downvote', null, {
+		return $http.put('/question/' + question._id + '/answers/' + answer._id + '/downvote', {
+			headers: {Authorization: 'Bearer ' + auth.getToken()}
+		}).success(function(data){
 			answer.upvotes -= 1;
 		});
 	};
 
 	o.create = function(question) {
-	  return $http.post('/question', question).success(function(data){
+	  return $http.post('/question', question, {
+	  	headers: {Authorization: 'Bearer ' + auth.getToken()}
+	  }).success(function(data){
 	    o.questions.push(data);
 	  });
 	};
 
 	o.addComment = function(id, comment) {
-	  return $http.post('/question/' + id + '/answers', comment);
+	  return $http.post('/question/' + id + '/answers', comment, {
+	  	headers: {Authorization: 'Bearer ' + auth.getToken()}
+	  });
 	};
 
 	return o;
@@ -143,18 +154,19 @@ app.controller('MainCtrl', ['$scope', 'questions', 'auth', function($scope, ques
 		auth.logout();
 	};
 
-	$scope.isLoggedIn = auth.isLoggedIn();
+	//$scope.isLoggedIn = auth.isLoggedIn();
+	$scope.isLoggedIn = auth.isLoggedIn;
 
 	console.log( auth.getToken() );
 	console.log( auth.currentUser() );
 	console.log( auth.isLoggedIn() );
-
 }]);
 
-
-app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', 'question', function($scope,$stateParams,questions,question){
+app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', 'question', 'auth', function($scope,$stateParams,questions,question, auth){
 	
 	$scope.question = question;
+	$scope.isLoggedIn = auth.isLoggedIn;
+	//$scope.isLoggedIn = auth.isLoggedIn();
 
 	console.log($scope.question);
 
@@ -176,7 +188,6 @@ app.controller('QuestionCtrl', ['$scope', '$stateParams', 'questions', 'question
 	$scope.minOne = function(question, answer) {
 		questions.minOneAnswer(question, answer);
 	};
-
 }]);
 
 app.controller('AuthCtrl', ['$scope','$state','auth', function($scope,$state,auth){
@@ -197,6 +208,12 @@ app.controller('AuthCtrl', ['$scope','$state','auth', function($scope,$state,aut
 			$state.go('home');
 		})
 	};
+}]);
+
+app.controller('NavCtrl', ['$scope', 'auth', function($scope, auth){
+	$scope.isLoggedIn = auth.isLoggedIn;
+	$scope.currentUser = auth.currentUser;
+	$scope.logOut = auth.logOut;
 }]);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){
