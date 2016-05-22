@@ -19,6 +19,16 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+
+server.listen('3005', function(){
+  console.log("Web server listening on port 3005");
+});
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -38,11 +48,11 @@ app.use('/', routes);
 app.use('/users', users);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+/*app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
-});
+});*/
 
 // error handlers
 
@@ -70,11 +80,4 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-//var server = http.createServer(app);
-
-//reload(server, app);
-
-/*server.listen(app.get('port'), function(){
-  console.log("Web server listening on port " + app.get('port'));
-});*/
 

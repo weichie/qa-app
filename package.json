@@ -51,6 +51,7 @@
     "serve-favicon": "~2.3.0",
     "slice": "0.0.5",
     "sliced": "^1.0.1",
+    "socket.io": "^1.4.6",
     "traverse": "^0.6.6",
     "wiredep": "^2.2.2"
   },

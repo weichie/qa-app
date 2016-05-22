@@ -30,8 +30,9 @@ gulp.task('sass', function() {
 
 gulp.task('browser-sync', function() {
     browserSync.init({
-        proxy: 'http://localhost:3000',
-        port: 4000
+        proxy: 'http://localhost:3005',
+        port: 4000,
+        ws: true,
     });
 });
 
