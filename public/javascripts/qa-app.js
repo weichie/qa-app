@@ -240,6 +240,12 @@ app.factory('questions', ['$http', 'auth', function($http, auth){
 	  });
 	};
 
+	o.removeComment = function(answer){
+		return $http.put('/answer/' + answer._id, answer, {
+		 headers: {Authorization: 'Bearer ' + auth.getToken()}
+		});
+	}
+
 	return o;
 }]);
 
@@ -331,6 +337,19 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 		} else {
 			return false;
 		}
+	}
+
+	$scope.trash = function(answer, qindex, aindex){
+
+		console.log( answer );
+			console.log( qindex );
+			console.log( aindex );
+
+		questions.removeComment(answer)
+		.success(function(){
+			$scope.discussion.questions[qindex].answers.splice(aindex, 1);
+			$window.socket.emit('changedQuestion', discussion);
+		});
 	}
 
 	$scope.addQuestion = function(){

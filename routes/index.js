@@ -203,7 +203,6 @@ router.get('/discussion/:discussion', function(req,res){
 	});
 });
 
-
 router.put('/question/:question/upvote', auth, function(req,res,next){
 
 	req.question.upvote(function(err,question){
@@ -240,6 +239,14 @@ router.put('/question/:question/answers/:answer/downvote', auth, function(req,re
 	});
 });
 
+// Delete antwoord
+router.put('/answer/:answer', auth, function(req, res, next){
+	req.answer.remove(function(err,question){
+		if(err){ return next(err); }
+
+		res.json(question);
+	});
+});
 
 
 module.exports = router;
