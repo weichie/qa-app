@@ -8,7 +8,8 @@ var QuestionSchema = new mongoose.Schema({
 	owner: String,
 	author: String,
 	upvotes: {type: Number, default: 0},
-	answers: [{type:mongoose.Schema.Types.ObjectId, ref:'Answer'}]
+	answers: [{type:mongoose.Schema.Types.ObjectId, ref:'Answer'}],
+	discussion: [{type:mongoose.Schema.Types.ObjectId, ref:'Discussion'}]
 });
 
 QuestionSchema.methods.upvote = function(cb){

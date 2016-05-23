@@ -86,6 +86,17 @@
 			</ul>
 		</section><!-- ./trending -->
 
+    <section class="trending">
+        <h2>Trending discussions <span class="pull-right">top 10 discussions</span></h2>
+      <ul class="vragenlijst">
+        <li ng-repeat="disc in discussions | orderBy: '-upvotes'">
+          <h3>
+            <a href="/#/discussion/{{ disc._id }}">{{ disc.title }}</a>
+          </h3>
+        </li>
+      </ul>
+    </section><!-- ./trending -->
+
 		<section class="latest">
 	    	<h2>nearby <a href="#!" class="pull-right">see all <i class="fa fa-angle-double-right"></i></a></h2>
 			<ul class="vragenlijst">
@@ -216,27 +227,138 @@
 		</div>
 	</script>
 
-	<script type="text/ng-template" id="/addQuestion.html">
-		<h1>Post new question</h1>
+  <script type="text/ng-template" id="/discussion.html">
+    <div class="page-header">
+      <h1>{{ discussion.title }}</h1>
+      <span>Gestart door: {{ discussion.author }}</span>
 
-		<form class="addQuestion" ng-show="isLoggedIn()" ng-submit="addQuestion()">
+          <!--<p class="good-question">Was this a good question?</p>-->
+      <button class="btn btn-default close-question pull-right">close discussion</button>
+          <ul class="question-vote">
+        <li>{{ question.upvotes }}</li>
+        <li>
+          <a href="/#/question/{{ question._id }}" ng-click="plusOne(question)" class="upvotes">
+            <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+          </a>
+        </li>
+        <li>
+          <a href="/#/question/{{ question._id }}" ng-click="minOne(question)" class="upvotes">
+            <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="answers" ng-repeat="question in discussion.questions | orderBy:'-upvotes'">
+      <ul class="voting">
+        <li>{{ question.upvotes }}</li>
+        <li>
+          <a href="/#/discussion/{{ discussion._id }}" ng-click="plusOneAnswer(discussion, question)" class="upvotes">
+            <i class="fa fa-thumbs-o-up"></i>
+          </a>
+        </li>
+        <li>
+          <a href="/#/discussion/{{ discussion._id }}" ng-click="minOneAnswer(discussion, question)" class="upvotes">
+            <i class="fa fa-thumbs-o-down"></i>
+          </a>
+        </li>
+        <li>
+          <a href="/#/discussion/{{ discussion._id }}" ng-click="trash(question)">
+            <i class="fa fa-trash-o"></i>
+          </a>
+        </li>
+      </ul>
+      <p class="author">{{question.author}}</p>
+      <!--<p class="comment">{{question.body}}</p>-->
+      <p class="comment" ng-bind-html="question.body | ifImage | sanitize"></p>
+
+      <hr>
+
+        <div class="answers" ng-repeat="answer_ in question.answers | orderBy:'-upvotes'">
+        <ul class="voting">
+          <li>{{ answer_.upvotes }}</li>
+          <li>
+            <a href="/#/discussion/{{ discussion._id }}" ng-click="plusOneAnswer(discussion, question)" class="upvotes">
+              <i class="fa fa-thumbs-o-up"></i>
+            </a>
+          </li>
+          <li>
+            <a href="/#/discussion/{{ discussion._id }}" ng-click="minOneAnswer(discussion, question)" class="upvotes">
+              <i class="fa fa-thumbs-o-down"></i>
+            </a>
+          </li>
+          <li>
+            <a href="/#/discussion/{{ discussion._id }}" ng-click="trash(answer)">
+              <i class="fa fa-trash-o"></i>
+            </a>
+          </li>
+        </ul>
+        <p class="author">{{answer_.author}}</p>
+        <p class="comment" ng-bind-html="answer_.body | ifImage | sanitize"></p>
+      </div>
+
+      <form ng-submit="addAnswer(question._id,$index)" class="answer-form" ng-show="isLoggedIn()">
+          <h3>Add a new answer</h3>
+
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Write your answer" ng-model="answer[$index].body"></input>
+          </div>
+          <button type="submit" class="btn btn-primary">Post</button>
+      </form>
+
+    </div>
+
+      <form ng-submit="addQuestion()" class="answer-form" ng-show="isLoggedIn()">
+        <h3>Add a new question</h3>
+
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Write your question" ng-model="body"></input>
+        </div>
+        <button type="submit" class="btn btn-primary">Post</button>
+    </form>
+    
+    <div ng-hide="isLoggedIn()">
+      <h3>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can add a comment.</h3>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="/addQuestion.html">
+    <h1>Post new question</h1>
+
+    <form class="addQuestion" ng-show="isLoggedIn()" ng-submit="addQuestion()">
+      <div class="form-group">
+        <label for="title">Question</label>
+        <input type="text" class="form-control" id="title" ng-model="title" placeholder="title of your question">
+      </div>
+      <div class="form-group">
+        <label for="link">URL</label>
+        <input type="text" class="form-control" id="link" ng-model="link" placeholder="link">
+      </div>
+      <div class="form-group">
+        <label for="message">Explain your question</label>
+        <textarea type="text" rows="8" class="form-control" id="message" ng-model="body" placeholder="Write more info about your question..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Post question</button>
+    </form>
+
+    <div ng-hide="isLoggedIn()">
+      <h3>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can add a question.</h3>
+    </div>
+  </script>
+
+	<script type="text/ng-template" id="/addDiscussion.html">
+		<h1>Post new Discussion</h1>
+
+		<form class="addDiscussion" ng-show="isLoggedIn()" ng-submit="addDiscussion()">
 			<div class="form-group">
-				<label for="title">Question</label>
-				<input type="text" class="form-control" id="title" ng-model="title" placeholder="title of your question">
-			</div>
-			<div class="form-group">
-				<label for="link">Password</label>
-				<input type="text" class="form-control" id="link" ng-model="link" placeholder="link">
-			</div>
-			<div class="form-group">
-				<label for="message">Explain your question</label>
-				<textarea type="text" rows="8" class="form-control" id="message" ng-model="body" placeholder="Write more info about your question..."></textarea>
+				<label for="title">Discussion title</label>
+				<input type="text" class="form-control" id="title" ng-model="title" placeholder="title of your discussion">
 			</div>
 			<button type="submit" class="btn btn-primary">Post question</button>
 		</form>
 
 		<div ng-hide="isLoggedIn()">
-			<h3>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can add a question.</h3>
+			<h3>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can add a discussion.</h3>
 		</div>
 	</script>
 

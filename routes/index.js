@@ -6,6 +6,7 @@ var jwt = require('express-jwt');
 var Question = mongoose.model('Question');
 var Answer = mongoose.model('Answer');
 var User = mongoose.model('User');
+var Discussion = mongoose.model('Discussion');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 
@@ -19,6 +20,28 @@ router.get('/question', function(req,res,next){
 		if(err){ return next(err); }
 
 		res.json(question);
+	});
+});
+
+router.get('/discussion', function(req, res, next){
+	Discussion.find(function(err, discussion){
+		if(err){ return next(err); }
+
+		res.json(discussion);
+	});
+});
+
+router.post('/discussion', auth, function(req,res,next){
+
+	var discussion = new Discussion(req.body);
+	discussion.author = req.payload.username;
+	discussion.owner = req.payload._id;
+	// En hier moeten we de vraag nog aan een discussie toevoegen... ? 
+
+	discussion.save(function(err,question){
+		if(err){ return next(err); }
+
+		res.json(discussion);
 	});
 });
 
@@ -73,6 +96,25 @@ router.post('/login', function(req,res,next){
 	})(req, res, next);
 });
 
+// Post Question to Discussion
+router.post('/discussion/:discussion/questions', auth, function(req, res, next) {
+  var question = new Question(req.body);
+  question.discussion = req.discussion;
+  question.owner = req.payload._id;
+  question.author = req.payload.username;
+
+  question.save(function(err, question){
+    if(err){ return next(err); }
+
+    req.discussion.questions.push(question);
+    req.discussion.save(function(err, post) {
+      if(err){ return next(err); }
+
+      res.json(question);
+    });
+  });
+});
+
 // Post Answer to Question
 router.post('/question/:question/answers', auth, function(req, res, next) {
   var answer = new Answer(req.body);
@@ -91,6 +133,19 @@ router.post('/question/:question/answers', auth, function(req, res, next) {
       res.json(answer);
     });
   });
+});
+
+// Build Discussion Param
+router.param('discussion', function(req,res,next,id){
+	var query = Discussion.findById(id);
+
+	query.exec(function(err,discussion){
+		if(err){ return next(err); }
+		if(!discussion){ return next(new Error('Can\'t find post...')); }
+
+		req.discussion = discussion;
+		return next();
+	});
 });
 
 // Build Question Param
@@ -125,6 +180,26 @@ router.get('/question/:question', function(req,res){
 	req.question.populate('answers', function(err, question){
 		if( err ) { return next(err); }
 		res.json(question);
+	});
+});
+
+// Return single Discussion (with questions and commennt? ) :)
+/*router.get('/discussion/:discussion', function(req,res){
+
+	req.discussion.populate('questions', function(err, discussion){
+		if( err ) { return next(err); }
+		res.json(discussion);
+	});
+});*/
+
+router.get('/discussion/:discussion', function(req,res){
+
+	req.discussion.populate({
+		path: 'questions',
+		populate: { path: 'answers' }
+	}, function(err, discussion){
+		if( err ) { return next(err); }
+		res.json(discussion);
 	});
 });
 

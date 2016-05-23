@@ -12,6 +12,7 @@ var passport = require('passport');
 require('./models/Questions');
 require('./models/Answers');
 require('./models/Users');
+require('./models/Discussions');
 require('./config/passport');
 mongoose.connect('mongodb://localhost/qa');
 

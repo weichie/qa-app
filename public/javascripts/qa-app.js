@@ -30,7 +30,6 @@ app.filter("ifImage" , function(){
     	return data = val;
     }
     
-
     // Return value if true
     /*if(find.test(val))
       return data ='<img src="'+val+'">';
@@ -104,6 +103,74 @@ app.factory('auth', ['$http','$window', function($http,$window){
 	};
 
 	return auth;
+}]);
+
+app.factory('discussions', ['$http', 'auth', function($http, auth){
+	var o = {
+		discussions: []
+	};
+
+	o.getAll = function(){
+		return $http.get('/discussion').success(function(data){
+			angular.copy(data,o.discussions);
+		});
+	};
+
+	o.get = function(id) {
+	  return $http.get('/discussion/' + id).then(function(res){
+	    return res.data;
+	  });
+	};
+
+	/*o.plusOne = function(discussion) {
+		return $http.put('/discussion/' + discussion._id + '/upvote', null, {
+			headers: {Authorization: 'Bearer ' + auth.getToken()}
+		}).success(function(data){
+			discussion.upvotes += 1;
+		});
+	};
+
+	o.minOne = function(discussion) {
+		//return $http.put('/question/' + question._id + '/downvote', null, {
+		return $http.put('/discussion/' + discussion._id + '/downvote', null, {
+			headers: {Authorization: 'Bearer ' + auth.getToken()}
+		}).success(function(data){
+			discussion.upvotes -= 1;
+		});
+	};
+
+	o.plusOneQuestion = function(discussion, answer) {
+		return $http.put('/discussion/' + discussion._id + '/answers/' + answer._id + '/upvote', null, {
+			headers: {Authorization: 'Bearer ' + auth.getToken()}
+		}).success(function(data){
+			question.upvotes += 1;
+		});
+	};
+
+	o.minOneAnswer = function(question, answer) {
+		//return $http.put('/question/' + question._id + '/answers/' + answer._id + '/downvote', null, {
+		return $http.put('/question/' + question._id + '/answers/' + answer._id + '/downvote', null, {
+			headers: {Authorization: 'Bearer ' + auth.getToken()}
+		}).success(function(data){
+			answer.upvotes -= 1;
+		});
+	};*/
+
+	o.create = function(discussion) {
+	  return $http.post('/discussion', discussion, {
+	  	headers: {Authorization: 'Bearer ' + auth.getToken()}
+	  }).success(function(data){
+	    o.discussions.push(data);
+	  });
+	};
+
+	o.addQuestion = function(id, question) {
+	  return $http.post('/discussion/' + id + '/questions', question, {
+	  	headers: {Authorization: 'Bearer ' + auth.getToken()}
+	  });
+	};
+
+	return o;
 }]);
 
 app.factory('questions', ['$http', 'auth', function($http, auth){
@@ -196,11 +263,14 @@ app.factory('checkIfImg', function($q) {
     };
 });
 
-app.controller('MainCtrl', ['$scope', 'questions', 'auth', '$window', function($scope, questions, auth, $window){
+app.controller('MainCtrl', ['$scope', 'questions', 'auth', '$window', 'discussions', function($scope, questions, auth, $window, discussions){
 	//$scope.questions = questions.questions;
 	
 	questions.getAll();
 	$scope.q = questions.questions;
+
+	discussions.getAll();
+	$scope.discussions = discussions.discussions;
 
 	$scope.plusOne = function(question) {
 		questions.plusOne(question);
@@ -247,34 +317,55 @@ app.controller('MainCtrl', ['$scope', 'questions', 'auth', '$window', function($
 	console.log( auth.isLoggedIn() );
 }]);
 
+app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussions', 'questions', 'discussion', 'auth','checkIfImg', function($scope, $window, $stateParams,discussions,questions,discussion,auth,checkIfImg){
+
+	$scope.discussion = discussion;
+	$scope.answer = {};
+
+	console.log( discussion );
+
+	$scope.isLoggedIn = auth.isLoggedIn;
+	$scope.isAdmin = function(){
+		if( auth.currentUserId() === question.owner ){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	$scope.addQuestion = function(){
+	  if(!$scope.body || $scope.body === '') { return; }
+	  discussions.addQuestion(discussion._id, {
+	  	body: $scope.body,
+	  }).success(function(question){
+	  	// We push our answer to the current scope.
+	  	$scope.discussion.questions.push(question);
+	  	// Send out an emit
+	  	$window.socket.emit('changedQuestion', discussion);
+
+	  });
+	  $scope.body = '';
+	};
+
+	$scope.addAnswer = function(qid, index){
+	  if(!$scope.answer[index].body || $scope.answer[index].body === '') { return; }
+	  questions.addComment(qid, {
+	  	body: $scope.answer[index].body,
+	  }).success(function(answer){
+	  	// We push our answer to the current scope.
+	  	$scope.discussion.questions[index].answers.push(answer);
+	  	// Send out an emit
+	  	$window.socket.emit('changedQuestion', discussion);
+
+	  });
+	  $scope.answer[index].body = '';
+	};
+
+}]);
+
 app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions', 'question', 'auth','checkIfImg', function($scope, $window, $stateParams,questions,question, auth,checkIfImg){
-	
-	/*$scope.findImages = function(){
-		for(var i=0;i<$scope.question.answers.length;i++){
-			console.log( $scope.question.answers[i].body );
-
-			var currentBody = $scope.question.answers[i].body;
-
-			checkIfImg.isImage( currentBody, i ).then(function(result, i) {
-				if( result ){
-					console.log( $scope.question.answers );
-					console.log( $scope.question.answers[i].body );
-	            	$scope.question.answers[i].body = "<img ng-src='" + $scope.question.answers[i].body + "'/>";
-	        		console.log( $scope.question.answers[i].body );
-
-	        	}
-	        });
-
-	        if( checkImg ){
-	        	data.answers[i].body = "<img ng-src=" + data.answers[i].body + "/>";
-	        	console.log( data.answers[i].body );
-	        } 
-	    }
-	}*/
 
 	$scope.question = question;
-	//$scope.findImages();
-	
 
 	$scope.isLoggedIn = auth.isLoggedIn;
 	$scope.isAdmin = function(){
@@ -343,16 +434,22 @@ app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions'
 		questions.minOneAnswer(question, answer);
 	};
 
-	/*$scope.test = function() {
-        checkIfImg.isImage($scope.body).then(function(result) {
-            console.log(result);
-            if(result == true){
-            	$scope.body = "<img ng-src=" + result + "/>";
-            }else{
-            	return false;
-            }
-        });
-    };*/
+}]);
+
+app.controller('AddDiscussionCtrl', ['$scope', 'discussions', 'auth', '$window', function($scope, discussions, auth, $window){
+	$scope.isLoggedIn = auth.isLoggedIn;
+
+	$scope.addDiscussion = function(){
+		if(!$scope.title || $scope.title === '') { return; }
+
+		discussions.create({
+			'title': $scope.title,
+		});
+
+		$window.socket.emit('pushQuestions');
+
+		$scope.title = '';
+	}
 }]);
 
 app.controller('AddqCtrl', ['$scope', 'questions', 'auth' , function($scope, questions, auth){
@@ -428,10 +525,25 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 				}]
 			}
 		})
+		.state('discussion', {
+			url: '/discussion/{id}',
+			templateUrl: '/discussion.html',
+			controller: 'DiscussionCtrl',
+			resolve: {
+				discussion: ['$stateParams', 'discussions', function($stateParams, discussions) {
+					return discussions.get($stateParams.id);
+				}]
+			}
+		})
 		.state('addQuestion', {
 			url: '/addQuestion',
 			templateUrl: '/addQuestion.html',
 			controller: 'AddqCtrl'
+		})
+		.state('addDiscussion', {
+			url: '/addDiscussion',
+			templateUrl: '/addDiscussion.html',
+			controller: 'AddDiscussionCtrl'
 		})
 		.state('login', {
 			url: '/login',
