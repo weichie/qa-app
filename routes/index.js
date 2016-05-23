@@ -26,6 +26,8 @@ router.post('/question', auth, function(req,res,next){
 
 	var question = new Question(req.body);
 	question.author = req.payload.username;
+	question.owner = req.payload._id;
+	// En hier moeten we de vraag nog aan een discussie toevoegen... ? 
 
 	question.save(function(err,question){
 		if(err){ return next(err); }
@@ -63,6 +65,7 @@ router.post('/login', function(req,res,next){
 		if(err){ return next(err); }
 
 		if(user){
+			console.log(JSON.stringify(user, null, 4));
 			return res.json({token: user.generateJWT()});
 		}else{
 			return res.status(401).json(info);
@@ -74,6 +77,8 @@ router.post('/login', function(req,res,next){
 router.post('/question/:question/answers', auth, function(req, res, next) {
   var anwser = new Answer(req.body);
   anwser.question = req.question;
+  answer.owner = req.payload._id;
+  answer.author = req.payload.username;
 
   anwser.save(function(err, anwser){
     if(err){ return next(err); }

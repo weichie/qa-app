@@ -111,6 +111,7 @@
 	<script type="text/ng-template" id="/question.html">
 		<div class="page-header">
 			<h1>{{ question.title }}</h1>
+      <span>Gesteld door: {{ question.author }}</span>
       		<p>{{ question.body }}</p>
 
       		<p>Was this a good question?</p>
@@ -207,7 +208,7 @@
 	</script>
 
 	<script type="text/ng-template" id="/login.html">
-  
+
 		<div ng-show="error" class="alert alert-danger row">
 			<span>{{ error.message }}</span>
 		</div>

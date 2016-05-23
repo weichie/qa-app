@@ -22,6 +22,15 @@ app.factory('auth', ['$http','$window', function($http,$window){
 		}
 	};
 
+	auth.currentUserId = function(){
+		if(auth.isLoggedIn()){
+			var token = auth.getToken();
+			var payload = JSON.parse($window.atob(token.split('.')[1]));
+
+			return payload._id;
+		}
+	};
+
 	auth.currentUser = function(){
 		if(auth.isLoggedIn()){
 			var token = auth.getToken();
@@ -168,6 +177,7 @@ app.controller('MainCtrl', ['$scope', 'questions', 'auth', '$window', function($
 
 	console.log( auth.getToken() );
 	console.log( auth.currentUser() );
+	console.log( auth.currentUserId() );
 	console.log( auth.isLoggedIn() );
 }]);
 
@@ -250,7 +260,7 @@ app.controller('AddqCtrl', ['$scope', 'questions', 'auth' , function($scope, que
 		questions.create({
 			'title': $scope.title,
 			'link': $scope.link,
-			'body': $scope.body
+			'body': $scope.body,
 		});
 
 		$window.socket.emit('pushQuestions');

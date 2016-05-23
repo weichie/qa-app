@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var AnswerSchema = new mongoose.Schema({
 	body: String,
 	author: String,
+	owner: String,
 	upvotes: {type: Number, default: 0},
 	question: [{type: mongoose.Schema.Types.ObjectId, ref:'Question'}]
 });
