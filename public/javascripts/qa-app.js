@@ -1,5 +1,24 @@
 var app = angular.module('qaApp', ['ui.router']);
 
+app.filter("ifImage" , function(){
+  return function(val){
+    // regex to check image extension.
+    var find = new RegExp("(.png|.jpg|.gif|.jpeg)$");
+    var data = val;
+    // Return value if true
+    if(find.test(val))
+      return data ='<img src="'+val+'">';
+    else
+      return data = val;
+   };
+ });
+
+app.filter("sanitize", ['$sce', function($sce) {
+  return function(htmlCode){
+    return $sce.trustAsHtml(htmlCode);
+  }
+}]);
+
 app.factory('auth', ['$http','$window', function($http,$window){
 	var auth = {};
 
@@ -132,16 +151,16 @@ app.factory('questions', ['$http', 'auth', function($http, auth){
 
 app.factory('checkIfImg', function($q) {
     return {
-        isImage: function(src) {
+        isImage: function(src, i) {
         
             var deferred = $q.defer();
         
             var image = new Image();
             image.onerror = function() {
-                deferred.resolve(false);
+                deferred.resolve({result:true, i:i});
             };
             image.onload = function() {
-                deferred.resolve(true);
+                deferred.resolve({result:true, i:i});
             };
             image.src = src;
         
@@ -203,8 +222,43 @@ app.controller('MainCtrl', ['$scope', 'questions', 'auth', '$window', function($
 
 app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions', 'question', 'auth','checkIfImg', function($scope, $window, $stateParams,questions,question, auth,checkIfImg){
 	
+	/*$scope.findImages = function(){
+		for(var i=0;i<$scope.question.answers.length;i++){
+			console.log( $scope.question.answers[i].body );
+
+			var currentBody = $scope.question.answers[i].body;
+
+			checkIfImg.isImage( currentBody, i ).then(function(result, i) {
+				if( result ){
+					console.log( $scope.question.answers );
+					console.log( $scope.question.answers[i].body );
+	            	$scope.question.answers[i].body = "<img ng-src='" + $scope.question.answers[i].body + "'/>";
+	        		console.log( $scope.question.answers[i].body );
+
+	        	}
+	        });
+
+	        if( checkImg ){
+	        	data.answers[i].body = "<img ng-src=" + data.answers[i].body + "/>";
+	        	console.log( data.answers[i].body );
+	        } 
+	    }
+	}*/
+
 	$scope.question = question;
+	//$scope.findImages();
+	
+
 	$scope.isLoggedIn = auth.isLoggedIn;
+	$scope.isAdmin = function(){
+		if( auth.currentUserId() === question.owner ){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	console.log( $scope.isAdmin() );
 	//$scope.isLoggedIn = auth.isLoggedIn();
 
 	console.log($scope.question);
@@ -218,6 +272,8 @@ app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions'
 		questions.get( question._id ).then(function(data){
 			console.log( data );
 			$scope.question = data;
+			//$scope.findImages();
+			
 		});
 
 		//$scope.$apply();
@@ -264,16 +320,16 @@ app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions'
 		questions.minOneAnswer(question, answer);
 	};
 
-	$scope.test = function() {
+	/*$scope.test = function() {
         checkIfImg.isImage($scope.body).then(function(result) {
             console.log(result);
             if(result == true){
-            	$scope.result = "<img ng-src=" + result + "/>";
+            	$scope.body = "<img ng-src=" + result + "/>";
             }else{
             	return false;
             }
         });
-    };
+    };*/
 }]);
 
 app.controller('AddqCtrl', ['$scope', 'questions', 'auth' , function($scope, questions, auth){

@@ -192,7 +192,8 @@
 				</li>
 			</ul>
 			<p class="author">{{answer.author}}</p>
-			<p class="comment">{{answer.body}}</p>
+			<!--<p class="comment">{{answer.body}}</p>-->
+      <p class="comment" ng-bind-html="answer.body | ifImage | sanitize"></p>
 		</div>
 
     	<form ng-submit="addComment()" class="answer-form" ng-show="isLoggedIn()">
@@ -201,7 +202,7 @@
     		<div class="form-group">
     			<input type="text" class="form-control" placeholder="Write your comment" ng-model="body"></input>
     		</div>
-    		<button type="submit" class="btn btn-primary" ng-click="test()">Post</button>
+    		<button type="submit" class="btn btn-primary">Post</button>
 		</form>
 		
 		<div ng-hide="isLoggedIn()">

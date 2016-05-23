@@ -75,19 +75,20 @@ router.post('/login', function(req,res,next){
 
 // Post Answer to Question
 router.post('/question/:question/answers', auth, function(req, res, next) {
-  var anwser = new Answer(req.body);
-  anwser.question = req.question;
+  var answer = new Answer(req.body);
+  answer.question = req.question;
   answer.owner = req.payload._id;
   answer.author = req.payload.username;
 
-  anwser.save(function(err, anwser){
+
+  answer.save(function(err, anwser){
     if(err){ return next(err); }
 
     req.question.answers.push(anwser);
     req.question.save(function(err, post) {
       if(err){ return next(err); }
 
-      res.json(anwser);
+      res.json(answer);
     });
   });
 });
@@ -163,5 +164,7 @@ router.put('/question/:question/answers/:answer/downvote', auth, function(req,re
 		res.json(question);
 	});
 });
+
+
 
 module.exports = router;
