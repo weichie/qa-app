@@ -57,6 +57,15 @@ header {
   color: #000;
   text-decoration: none !important; }
 
+.page-header h1 {
+  margin-bottom: 0; }
+
+.auth {
+  margin-top: 5px;
+  margin-bottom: 20px;
+  font-style: italic;
+  color: #959595; }
+
 .trending {
   margin-bottom: 50px; }
   .trending h2 {
@@ -174,6 +183,7 @@ header {
 
 .sidebar ul {
   margin-top: 5px;
+  margin-bottom: 35px;
   background: #fafafa;
   border-top: 1px solid #ff7200;
   list-style-type: none;
