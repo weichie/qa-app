@@ -307,14 +307,12 @@ app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions'
 	});
 
 	$scope.plusOne = function(question) {
-
 		$window.socket.emit('changedQuestion', question);
 		$window.socket.emit('pushQuestions', question);
 		questions.plusOne(question);
 	};
 
 	$scope.minOne = function(question) {
-
 		$window.socket.emit('changedQuestion', question);
 		$window.socket.emit('pushQuestions', question);
 		questions.minOne(question);
@@ -336,13 +334,11 @@ app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions'
 	};
 
 	$scope.plusOneAnswer = function(question, answer) {
-
 		$window.socket.emit('changedQuestion', question);
 		questions.plusOneAnswer(question, answer);
 	};
 
 	$scope.minOneAnswer = function(question, answer) {
-
 		$window.socket.emit('changedQuestion', question);
 		questions.minOneAnswer(question, answer);
 	};
