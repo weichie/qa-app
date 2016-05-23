@@ -255,15 +255,15 @@
       <span>Gestart door: {{ discussion.author }}</span>
 
           <!--<p class="good-question">Was this a good question?</p>-->
-      <button class="btn btn-default close-question pull-right" ng-show="isAdmin()">close discussion</button>
-          <ul class="question-vote">
+      <button class="btn btn-default close-question pull-right" ng-click="close();" ng-show="isAdmin()" ng-hide="isClosed">close discussion</button>
+          <ul class="question-vote" >
         <li>{{ question.upvotes }}</li>
-        <li>
+        <li ng-hide="isClosed">
           <a href="/#/question/{{ question._id }}" ng-click="plusOne(question)" class="upvotes">
             <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
           </a>
         </li>
-        <li>
+        <li ng-hide="isClosed">
           <a href="/#/question/{{ question._id }}" ng-click="minOne(question)" class="upvotes">
             <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
           </a>
@@ -275,12 +275,12 @@
       <ul class="voting">
         <li>{{ question.upvotes }}</li>
         <li>
-          <a href="/#/discussion/{{ discussion._id }}" ng-click="plusOneAnswer(discussion, question)" class="upvotes">
+          <a href="/#/discussion/{{ discussion._id }}" ng-hide="isClosed" ng-click="plusOneAnswer(discussion, question)" class="upvotes">
             <i class="fa fa-thumbs-o-up"></i>
           </a>
         </li>
         <li>
-          <a href="/#/discussion/{{ discussion._id }}" ng-click="minOneAnswer(discussion, question)" class="upvotes">
+          <a href="/#/discussion/{{ discussion._id }}" ng-hide="isClosed" ng-click="minOneAnswer(discussion, question)" class="upvotes">
             <i class="fa fa-thumbs-o-down"></i>
           </a>
         </li>
@@ -314,7 +314,7 @@
         <p class="comment" ng-bind-html="answer_.body | ifImage | sanitize"></p>
       </div>
 
-      <form ng-submit="addAnswer(question._id,$index)" class="answer-form" ng-show="isLoggedIn()">
+      <form ng-submit="addAnswer(question._id,$index)" ng-hide="isClosed" class="answer-form" ng-show="isLoggedIn()">
           <h3>Add a new answer</h3>
 
           <div class="form-group">
@@ -325,7 +325,7 @@
 
     </div>
 
-      <form ng-submit="addQuestion()" class="answer-form" ng-show="isLoggedIn()">
+      <form ng-submit="addQuestion()" class="answer-form" ng-hide="isClosed" ng-show="isLoggedIn()">
         <h3>Add a new question</h3>
 
         <div class="form-group">
@@ -334,7 +334,7 @@
         <button type="submit" class="btn btn-primary">Post</button>
     </form>
     
-    <div ng-hide="isLoggedIn()">
+    <div ng-hide="isLoggedIn()" >
       <h3>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can add a comment.</h3>
     </div>
   </script>

@@ -170,6 +170,12 @@ app.factory('discussions', ['$http', 'auth', function($http, auth){
 	  });
 	};
 
+	o.closeDiscussion = function(discussion){
+		return $http.put('/discussion/'+discussion._id+'/close', discussion, {
+			headers: {Authorization: 'Bearer ' + auth.getToken()}
+		});
+	}
+
 	return o;
 }]);
 
@@ -327,6 +333,7 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 
 	$scope.discussion = discussion;
 	$scope.answer = {};
+	$scope.isClosed = discussion.closed;
 
 	console.log( discussion );
 
@@ -339,11 +346,19 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 		}
 	}
 
+	$scope.close = function(){
+		discussions.closeDiscussion(discussion)
+		.success(function(){
+			$scope.isClosed = true;
+			$window.socket.emit('changedQuestion', discussion);
+		});
+	}
+
 	$scope.trash = function(answer, qindex, aindex){
 
 		console.log( answer );
-			console.log( qindex );
-			console.log( aindex );
+		console.log( qindex );
+		console.log( aindex );
 
 		answer.discussion = discussion._id
 
