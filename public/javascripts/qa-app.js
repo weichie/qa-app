@@ -162,6 +162,12 @@ app.factory('discussions', ['$http', 'auth', function($http, auth){
 		});
 	};*/
 
+	o.closeDiscussion = function(discussion){
+		return $http.put('/discussion/'+discussion._id+'/close', discussion, {
+			headers: {Authorization: 'Bearer ' + auth.getToken()}
+		});
+	}
+
 	o.create = function(discussion) {
 	  return $http.post('/discussion', discussion, {
 	  	headers: {Authorization: 'Bearer ' + auth.getToken()}
@@ -333,6 +339,7 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 
 	$scope.discussion = discussion;
 	$scope.answer = {};
+	$scope.isClosed = discussion.closed;
 
 	console.log( discussion );
 
@@ -356,6 +363,14 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 		questions.removeComment(answer)
 		.success(function(){
 			$scope.discussion.questions[qindex].answers.splice(aindex, 1);
+			$window.socket.emit('changedQuestion', discussion);
+		});
+	}
+
+	$scope.close = function(){
+		discussions.closeDiscussion(discussion)
+		.success(function(){
+			$scope.isClosed = true;
 			$window.socket.emit('changedQuestion', discussion);
 		});
 	}
