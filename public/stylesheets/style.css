@@ -151,10 +151,25 @@ header {
 
 .question-vote {
   display: flex;
+  width: 150px;
   list-style-type: none;
   padding: 0; }
   .question-vote li {
     width: 30px; }
+
+.close-question {
+  margin-top: -10px; }
+
+.sidebar {
+  border: 1px solid #000; }
+  .sidebar h2 {
+    text-transform: uppercase;
+    font-size: 1.2em;
+    margin: 0;
+    font-weight: 400;
+    text-align: right;
+    color: #959595;
+    font-size: 1em; }
 
 /* FOOTER 
 ======================== */

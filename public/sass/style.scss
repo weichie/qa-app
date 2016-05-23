@@ -209,12 +209,30 @@ header{
 }
 .question-vote{
 	display: flex;
+	width: 150px;
 	list-style-type: none;
 	padding: 0;
 
 	li 		{width: 30px;}
 }
+.close-question{
+	margin-top: -10px;
+}
 
+
+.sidebar{
+	border: 1px solid #000;
+	h2{
+		text-transform: uppercase;
+		font-size: 1.2em;
+		margin: 0;
+		font-weight: 400;
+		text-align: right;
+		color: $dark-grey;
+		font-size: 1em;
+	}
+	
+}
 /* FOOTER 
 ======================== */
 
