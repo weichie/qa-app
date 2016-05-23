@@ -196,7 +196,15 @@ router.get('/discussion/:discussion', function(req,res){
 
 	req.discussion.populate({
 		path: 'questions',
-		populate: { path: 'answers' }
+		populate: { 
+			path: 'answers',
+			populate: {
+				path: 'question',
+				populate: {
+					path: 'discussion'
+				}
+			}
+		}
 	}, function(err, discussion){
 		if( err ) { return next(err); }
 		res.json(discussion);
@@ -241,11 +249,29 @@ router.put('/question/:question/answers/:answer/downvote', auth, function(req,re
 
 // Delete antwoord
 router.put('/answer/:answer', auth, function(req, res, next){
-	req.answer.remove(function(err,question){
-		if(err){ return next(err); }
 
-		res.json(question);
+	console.log(JSON.stringify(req.body, null, 4));
+	//console.log(JSON.stringify(, null, 4));
+
+	Discussion.find(req.body.discussion, function(err, discussion){
+		if( err ) { return next(err); }
+
+		//console.log(JSON.stringify(discussion[0].owner, null, 4));
+		//console.log(JSON.stringify(req.payload._id, null, 4));
+
+		// Check if discussion owner is the same :D
+		if( discussion[0].owner != req.payload._id ){
+			return res.status(401).json({message: 'You\'re not the owner of this discussion!' });
+		} else {
+			req.answer.remove(function(err,question){
+				if(err){ return next(err); }
+
+				res.json(question);
+			});
+		}
 	});
+
+	
 });
 
 

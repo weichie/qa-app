@@ -332,7 +332,7 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 
 	$scope.isLoggedIn = auth.isLoggedIn;
 	$scope.isAdmin = function(){
-		if( auth.currentUserId() === question.owner ){
+		if( auth.currentUserId() === discussion.owner ){
 			return true;
 		} else {
 			return false;
@@ -344,6 +344,8 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 		console.log( answer );
 			console.log( qindex );
 			console.log( aindex );
+
+		answer.discussion = discussion._id
 
 		questions.removeComment(answer)
 		.success(function(){

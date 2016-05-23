@@ -255,7 +255,7 @@
       <span>Gestart door: {{ discussion.author }}</span>
 
           <!--<p class="good-question">Was this a good question?</p>-->
-      <button class="btn btn-default close-question pull-right">close discussion</button>
+      <button class="btn btn-default close-question pull-right" ng-show="isAdmin()">close discussion</button>
           <ul class="question-vote">
         <li>{{ question.upvotes }}</li>
         <li>
@@ -284,11 +284,6 @@
             <i class="fa fa-thumbs-o-down"></i>
           </a>
         </li>
-        <li>
-          <a href="/#/discussion/{{ discussion._id }}" ng-click="trash(question)">
-            <i class="fa fa-trash-o"></i>
-          </a>
-        </li>
       </ul>
       <p class="author">{{question.author}}</p>
       <!--<p class="comment">{{question.body}}</p>-->
@@ -310,7 +305,7 @@
             </a>
           </li>
           <li>
-            <a href="/#/discussion/{{ discussion._id }}" ng-click="trash(answer_, $parent.$index, $index)">
+            <a href="/#/discussion/{{ discussion._id }}" ng-show="isAdmin()" ng-click="trash(answer_, $parent.$index, $index)">
               <i class="fa fa-trash-o"></i>
             </a>
           </li>
