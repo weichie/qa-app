@@ -3,13 +3,40 @@ var app = angular.module('qaApp', ['ui.router']);
 app.filter("ifImage" , function(){
   return function(val){
     // regex to check image extension.
-    var find = new RegExp("(.png|.jpg|.gif|.jpeg)$");
+    var find = new RegExp("(.png|.jpg|.gif|.jpeg)");
     var data = val;
+
+    geturl = new RegExp(
+          "(^|[ \t\r\n])((http|https):(([A-Za-z0-9$_.+!*(),;/?:@&~=-])|%[A-Fa-f0-9]{2}){2,}(#([a-zA-Z0-9][a-zA-Z0-9$_.+!*(),;/?:@&~=%-]*))?([A-Za-z0-9$_+!*();/?:~-]))"
+         ,"g"
+       );
+
+    var matched = data.match(geturl);
+
+    console.log( matched );
+
+    if( matched !== null ){
+
+    	var newData = val;
+
+		for(var i=0;i<matched.length;i++){
+	    	console.log( matched[i] );
+	    	console.log(newData);
+	    	newData = newData.replace(matched[i], '<img src="'+matched[i]+'">');
+	    	console.log(newData);
+	    }
+	    return data = newData;
+    } else {
+    	return data = val;
+    }
+    
+
     // Return value if true
-    if(find.test(val))
+    /*if(find.test(val))
       return data ='<img src="'+val+'">';
     else
-      return data = val;
+      return data = val;*/
+
    };
  });
 
