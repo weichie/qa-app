@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var DiscussionSchema = new mongoose.Schema({
 	title: String,
-	closed: Boolean,
+	closed: Number,
 	owner: String,
 	author: String,
 	location: String,
@@ -17,11 +17,6 @@ DiscussionSchema.methods.upvote = function(cb){
 
 DiscussionSchema.methods.downvote = function(cb){
 	this.upvotes -= 1;
-	this.save(cb);
-}
-
-DiscussionSchema.methods.closeDiscussion = function(cb){
-	this.closed = true;
 	this.save(cb);
 }
 
