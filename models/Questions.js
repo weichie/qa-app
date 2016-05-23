@@ -4,6 +4,9 @@ var QuestionSchema = new mongoose.Schema({
 	title: String,
 	body: String,
 	link: String,
+	closed: Number,
+	owner: String,
+	author: String,
 	upvotes: {type: Number, default: 0},
 	answers: [{type:mongoose.Schema.Types.ObjectId, ref:'Answer'}]
 });
