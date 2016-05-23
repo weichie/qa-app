@@ -34,6 +34,10 @@ h1{
 .form-control{
 	border-radius: 0;
 }
+.btn{
+	border-radius: 0;
+}
+
 /* HEADER 
 ======================== */
 header{
@@ -221,7 +225,6 @@ header{
 
 
 .sidebar{
-	border: 1px solid #000;
 	h2{
 		text-transform: uppercase;
 		font-size: 1.2em;
@@ -231,7 +234,19 @@ header{
 		color: $dark-grey;
 		font-size: 1em;
 	}
-	
+
+	ul{
+		margin-top: 5px;
+		background: $light-grey;
+		border-top: 1px solid $orange;
+		list-style-type: none;
+		padding: 0;
+
+		li{
+			padding: 5px 10px;
+		}
+	}
+
 }
 /* FOOTER 
 ======================== */

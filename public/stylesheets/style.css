@@ -26,6 +26,9 @@ h1 {
 .form-control {
   border-radius: 0; }
 
+.btn {
+  border-radius: 0; }
+
 /* HEADER 
 ======================== */
 header {
@@ -160,16 +163,23 @@ header {
 .close-question {
   margin-top: -10px; }
 
-.sidebar {
-  border: 1px solid #000; }
-  .sidebar h2 {
-    text-transform: uppercase;
-    font-size: 1.2em;
-    margin: 0;
-    font-weight: 400;
-    text-align: right;
-    color: #959595;
-    font-size: 1em; }
+.sidebar h2 {
+  text-transform: uppercase;
+  font-size: 1.2em;
+  margin: 0;
+  font-weight: 400;
+  text-align: right;
+  color: #959595;
+  font-size: 1em; }
+
+.sidebar ul {
+  margin-top: 5px;
+  background: #fafafa;
+  border-top: 1px solid #ff7200;
+  list-style-type: none;
+  padding: 0; }
+  .sidebar ul li {
+    padding: 5px 10px; }
 
 /* FOOTER 
 ======================== */
