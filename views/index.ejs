@@ -49,6 +49,13 @@
 		<div class="col-xs-12 col-md-9 main-content">
     		<ui-view></ui-view>
     	</div><!-- ./main-content -->
+
+    	<div class="col-xs-12 col-md-3 sidebar">
+			<h2>Popular discussions</h2>
+			<ul>
+				<li><a href="#!"></a></li>
+			</ul>
+    	</div><!-- ./sidebar -->
 	</div><!-- ./content container -->
 
     <!-- Scriptzz -->
@@ -66,6 +73,40 @@
 						<a href="/#/question/{{ quest._id }}">{{ quest.title }}</a>
 					</h3>
 					<!--
+					<a href="{{ quest.link }}">{{quest.link}}</a><br>
+					{{ quest.body }}
+					-->
+				</li>
+			</ul>
+		</section><!-- ./trending -->
+
+		<section class="latest">
+	    	<h2>Close by <a href="#!" class="pull-right">see all <i class="fa fa-angle-double-right"></i></a></h2>
+			<ul class="vragenlijst">
+				<li ng-repeat="quest in q">
+					<h3>
+						<a href="/#/question/{{ quest._id }}">{{ quest.title }}</a>
+					</h3>
+					<p>
+						By Weichie &middot; 119 comments &middot; <span class="orange">1 minute ago</span>
+					</p>
+					<span ng-show="post.author">
+							posted by <a>{{post.author}}</a> |
+					</span>
+					<!--
+					<ul class="voting">
+						<li>{{ quest.upvotes }}</li>
+						<li>
+							<a href="#!" ng-click="plusOne(quest)" class="upvotes">
+								<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+							</a>
+						</li>
+						<li>
+							<a href="#!" ng-click="minOne(quest)" class="upvotes">
+								<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+							</a>
+						</li>
+					</ul>
 					<a href="{{ quest.link }}">{{quest.link}}</a><br>
 					{{ quest.body }}
 					-->
@@ -105,7 +146,7 @@
 					-->
 				</li>
 			</ul>
-		</section><!-- ./trending -->
+		</section><!-- ./latest -->
 	</script>
 
 	<script type="text/ng-template" id="/question.html">
@@ -114,8 +155,9 @@
       <span>Gesteld door: {{ question.author }}</span>
       		<p>{{ question.body }}</p>
 
-      		<p>Was this a good question?</p>
-      		<ul class="voting">
+      		<p class="good-question">Was this a good question?</p>
+			<button class="btn btn-default close-question pull-right">close question</button>
+      		<ul class="question-vote">
 				<li>{{ question.upvotes }}</li>
 				<li>
 					<a href="/#/question/{{ question._id }}" ng-click="plusOne(question)" class="upvotes">
@@ -135,12 +177,17 @@
 				<li>{{ answer.upvotes }}</li>
 				<li>
 					<a href="/#/question/{{ question._id }}" ng-click="plusOneAnswer(question, answer)" class="upvotes">
-						<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+						<i class="fa fa-thumbs-o-up"></i>
 					</a>
 				</li>
 				<li>
 					<a href="/#/question/{{ question._id }}" ng-click="minOneAnswer(question, answer)" class="upvotes">
-						<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+						<i class="fa fa-thumbs-o-down"></i>
+					</a>
+				</li>
+				<li>
+					<a href="/#/question/{{ question._id }}" ng-click="minOneAnswer(question, answer)" class="upvotes">
+						<i class="fa fa-trash-o"></i>
 					</a>
 				</li>
 			</ul>
@@ -154,7 +201,7 @@
     		<div class="form-group">
     			<input type="text" class="form-control" placeholder="Write your comment" ng-model="body"></input>
     		</div>
-    		<button type="submit" class="btn btn-primary">Post</button>
+    		<button type="submit" class="btn btn-primary" ng-click="test()">Post</button>
 		</form>
 		
 		<div ng-hide="isLoggedIn()">
@@ -187,10 +234,6 @@
 	</script>
 
 	<script type="text/ng-template" id="/register.html">
-		<div class="page-header">
-			<h1>Registratie</h1>
-		</div>
-
 		<div ng-show="error" class="alert alert-danger row">
 			<span>{{ error.message }}</span>
 		</div>
@@ -226,7 +269,7 @@
 		</form>
 	</script>
 
-      <script src="/socket.io/socket.io.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
     <script src="/javascripts/socket.js"></script>
 
 </body>

@@ -130,6 +130,26 @@ app.factory('questions', ['$http', 'auth', function($http, auth){
 	return o;
 }]);
 
+app.factory('checkIfImg', function($q) {
+    return {
+        isImage: function(src) {
+        
+            var deferred = $q.defer();
+        
+            var image = new Image();
+            image.onerror = function() {
+                deferred.resolve(false);
+            };
+            image.onload = function() {
+                deferred.resolve(true);
+            };
+            image.src = src;
+        
+            return deferred.promise;
+        }
+    };
+});
+
 app.controller('MainCtrl', ['$scope', 'questions', 'auth', '$window', function($scope, questions, auth, $window){
 	//$scope.questions = questions.questions;
 	
@@ -181,7 +201,7 @@ app.controller('MainCtrl', ['$scope', 'questions', 'auth', '$window', function($
 	console.log( auth.isLoggedIn() );
 }]);
 
-app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions', 'question', 'auth', function($scope, $window, $stateParams,questions,question, auth){
+app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions', 'question', 'auth','checkIfImg', function($scope, $window, $stateParams,questions,question, auth,checkIfImg){
 	
 	$scope.question = question;
 	$scope.isLoggedIn = auth.isLoggedIn;
@@ -201,7 +221,6 @@ app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions'
 		});
 
 		//$scope.$apply();
-		
 	});
 
 	$scope.plusOne = function(question) {
@@ -209,7 +228,6 @@ app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions'
 		$window.socket.emit('changedQuestion', question);
 		$window.socket.emit('pushQuestions', question);
 		questions.plusOne(question);
-
 	};
 
 	$scope.minOne = function(question) {
@@ -217,7 +235,6 @@ app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions'
 		$window.socket.emit('changedQuestion', question);
 		$window.socket.emit('pushQuestions', question);
 		questions.minOne(question);
-		
 	};
 
 	$scope.addComment = function(){
@@ -239,15 +256,24 @@ app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions'
 
 		$window.socket.emit('changedQuestion', question);
 		questions.plusOneAnswer(question, answer);
-		
 	};
 
 	$scope.minOneAnswer = function(question, answer) {
 
 		$window.socket.emit('changedQuestion', question);
 		questions.minOneAnswer(question, answer);
-		
 	};
+
+	$scope.test = function() {
+        checkIfImg.isImage($scope.body).then(function(result) {
+            console.log(result);
+            if(result == true){
+            	$scope.result = "<img ng-src=" + result + "/>";
+            }else{
+            	return false;
+            }
+        });
+    };
 }]);
 
 app.controller('AddqCtrl', ['$scope', 'questions', 'auth' , function($scope, questions, auth){
