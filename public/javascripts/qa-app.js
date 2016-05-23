@@ -37,7 +37,13 @@ app.filter("ifImage" , function(){
       return data = val;*/
 
    };
- });
+});
+
+app.filter('reverse', function() {
+	return function(items) {
+		return items.slice().reverse();
+	};
+});
 
 app.filter("sanitize", ['$sce', function($sce) {
   return function(htmlCode){

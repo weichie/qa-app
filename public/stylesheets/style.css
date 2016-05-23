@@ -191,6 +191,49 @@ header {
   .sidebar ul li {
     padding: 5px 10px; }
 
+.discussion-page h1 {
+  font-size: 4em;
+  font-weight: 700;
+  margin-bottom: 5px; }
+
+.discussion-page h3 {
+  margin: 0; }
+
+.discussion-page .post-question {
+  border: none; }
+  .discussion-page .post-question h3 {
+    margin-top: 20px;
+    margin-bottom: 10px; }
+
+.discussion-page .author {
+  margin: 0;
+  font-style: italic;
+  color: #959595; }
+
+.discussion-page .inspringen {
+  margin-left: 5%;
+  width: 95%; }
+  .discussion-page .inspringen form {
+    border: none; }
+
+.discussion-page .questions {
+  margin-top: 50px;
+  border-bottom: 1px solid #e7e7e7; }
+
+.discussion-page .voting {
+  margin-bottom: 10px;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  width: 100px; }
+  .discussion-page .voting li {
+    padding: 0;
+    width: 30px;
+    border: none;
+    text-align: center; }
+    .discussion-page .voting li:first-child {
+      text-align: left; }
+
 /* FOOTER 
 ======================== */
 /* RESPONSIVE 
