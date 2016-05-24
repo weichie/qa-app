@@ -41,7 +41,9 @@ app.filter("ifImage" , function(){
 	    	newData = newData.replace(matched[i], '<img src="'+matched[i]+'">');
 	    	console.log(newData);
 	    }
+
 	    return data = newData;
+
     } else {
     	return data = val;
     }

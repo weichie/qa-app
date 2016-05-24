@@ -22,10 +22,18 @@ gulp.task('lint', function() {
 });
 
 // Compile Our Sass
-gulp.task('sass', function() {
-    return gulp.src('public/sass/*.scss')
-        .pipe(sass())
-        .pipe(gulp.dest('public/stylesheets'));
+gulp.task('sass', function () {
+    gulp.src(['public/sass/*.scss'])
+        .pipe(sass({outputStyle: 'compressed'}))
+        .pipe(gulp.dest('dist/css'));
+});
+
+//Minify JS
+gulp.task('concat', function() {  
+    gulp.src('public/javascripts/qa-app.js')
+        //.pipe(concat('qa-app.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('public/dist/js'));
 });
 
 gulp.task('browser-sync', function() {
@@ -81,7 +89,7 @@ var nodemonOptions = {
     watch: ['bin/*', 'routes/*', 'app.js']
 };
 
-gulp.task('start', ['browser-sync', 'watch'], function(){
+gulp.task('start', ['browser-sync', 'watch', 'sass', 'scripts'], function(){
     nodemon(nodemonOptions)
         .on('restart', function(){
             console.log('restarted!');
