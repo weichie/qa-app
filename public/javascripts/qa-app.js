@@ -559,6 +559,11 @@ app.controller('NavCtrl', ['$scope', 'auth', function($scope, auth){
 	};
 }]);
 
+app.controller('SidebarCtrl', ['$scope', 'discussions', function($scope, discussions){
+	discussions.getAll();
+	$scope.discussions = discussions.discussions;
+}]);
+
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){
 	$stateProvider
 		.state('home', {

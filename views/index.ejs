@@ -50,38 +50,26 @@
     		<ui-view></ui-view>
     	</div><!-- ./main-content -->
 
-    	<div class="col-xs-12 col-md-3 sidebar">
-			<h2>Popular discussions</h2>
+    	<div class="col-xs-12 col-md-3 sidebar" ng-controller="SidebarCtrl">
+			<h2>TOP 5 discussions</h2>
 			<ul>
-				<li><a href="#!">nodejs</a></li>
-				<li><a href="#!">bootstrap</a></li>
-				<li><a href="#!">Angular</a></li>
-				<li><a href="#!">expressjs</a></li>
-				<li><a href="#!">nodejs</a></li>
-				<li><a href="#!">nodejs</a></li>
-				<li><a href="#!">see all discussions <i class="fa fa-angle-double-right"></i></a></li>
+				<li ng-repeat="disc in discussions | orderBy: '-upvotes' | limitTo: 5">
+					<a href="/#/discussion/{{ disc._id }}">{{ disc.title }}</a>
+				</li>
 			</ul>
 
 			<h2>Nearby discussions</h2>
 			<ul>
-				<li><a href="#!">nodejs</a></li>
-				<li><a href="#!">bootstrap</a></li>
-				<li><a href="#!">Angular</a></li>
-				<li><a href="#!">expressjs</a></li>
-				<li><a href="#!">nodejs</a></li>
-				<li><a href="#!">nodejs</a></li>
-				<li><a href="#!">see all discussions <i class="fa fa-angle-double-right"></i></a></li>
+				<li ng-repeat="disc in discussions | orderBy: '-upvotes' | limitTo: 5">
+					<a href="/#/discussion/{{ disc._id }}">{{ disc.title }}</a>
+				</li>
 			</ul>
 
 			<h2>Recent discussions</h2>
 			<ul>
-				<li><a href="#!">nodejs</a></li>
-				<li><a href="#!">bootstrap</a></li>
-				<li><a href="#!">Angular</a></li>
-				<li><a href="#!">expressjs</a></li>
-				<li><a href="#!">nodejs</a></li>
-				<li><a href="#!">nodejs</a></li>
-				<li><a href="#!">see all discussions <i class="fa fa-angle-double-right"></i></a></li>
+				<li ng-repeat="disc in discussions | reverse | limitTo: 10">
+					<a href="/#/discussion/{{ disc._id }}">{{ disc.title }}</a>
+				</li>
 			</ul>
     	</div><!-- ./sidebar -->
 	</div><!-- ./content container -->
@@ -96,7 +84,7 @@
     	<section class="trending">
 	    	<h2>Trending questions <span class="pull-right">top 10 questions</span></h2>
 			<ul class="vragenlijst">
-				<li ng-repeat="quest in q | orderBy: '-upvotes'">
+				<li ng-repeat="quest in q | orderBy: '-upvotes' | limitTo: 10">
 					<h3>
 						<a href="/#/question/{{ quest._id }}">{{ quest.title }}</a>
 					</h3>
@@ -108,6 +96,7 @@
 			</ul>
 		</section><!-- ./trending -->
 
+		<!--
 		<section class="trending">
 			<h2>Trending discussions <span class="pull-right">top 10 discussions</span></h2>
 			<ul class="vragenlijst">
@@ -116,8 +105,8 @@
 						<a href="/#/discussion/{{ disc._id }}">{{ disc.title }}</a>
 					</h3>
 				</li>
-		</ul>
-		</section><!-- ./trending -->
+			</ul>
+		</section> -->
 
 		<section class="latest">
 	    	<h2>nearby <a href="#!" class="pull-right">see all <i class="fa fa-angle-double-right"></i></a></h2>
