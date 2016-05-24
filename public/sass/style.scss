@@ -255,6 +255,19 @@ header{
 
 		li{
 			padding: 5px 10px;
+			
+			a{
+				text-decoration: none;
+				&:hover{
+					color: $dark-grey;
+				}
+			}
+
+			span{
+				color: $dark-grey;
+				font-style: italic;
+				margin-right: 2px;
+			}
 		}
 	}
 }

@@ -263,26 +263,6 @@ app.factory('questions', ['$http', 'auth', function($http, auth){
 	return o;
 }]);
 
-app.factory('checkIfImg', function($q) {
-    return {
-        isImage: function(src, i) {
-        
-            var deferred = $q.defer();
-        
-            var image = new Image();
-            image.onerror = function() {
-                deferred.resolve({result:true, i:i});
-            };
-            image.onload = function() {
-                deferred.resolve({result:true, i:i});
-            };
-            image.src = src;
-        
-            return deferred.promise;
-        }
-    };
-});
-
 app.controller('MainCtrl', ['$scope', 'questions', 'auth', '$window', 'discussions', function($scope, questions, auth, $window, discussions){
 	//$scope.questions = questions.questions;
 	
@@ -352,7 +332,7 @@ app.controller('MainCtrl', ['$scope', 'questions', 'auth', '$window', 'discussio
 	console.log( auth.isLoggedIn() );
 }]);
 
-app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussions', 'questions', 'discussion', 'auth','checkIfImg', function($scope, $window, $stateParams,discussions,questions,discussion,auth,checkIfImg){
+app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussions', 'questions', 'discussion', 'auth', function($scope, $window, $stateParams,discussions,questions,discussion,auth){
 
 	$scope.discussion = discussion;
 	$scope.answer = {};
@@ -486,11 +466,9 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 		$scope.people = peopleInDiscussion.join();
 		$scope.$apply();
 	});
-
-
 }]);
 
-app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions', 'question', 'auth','checkIfImg', function($scope, $window, $stateParams,questions,question, auth,checkIfImg){
+app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions', 'question', 'auth', function($scope, $window, $stateParams,questions,question, auth){
 
 	$scope.question = question;
 

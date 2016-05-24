@@ -25,15 +25,7 @@ gulp.task('lint', function() {
 gulp.task('sass', function () {
     gulp.src(['public/sass/*.scss'])
         .pipe(sass({outputStyle: 'compressed'}))
-        .pipe(gulp.dest('dist/css'));
-});
-
-//Minify JS
-gulp.task('concat', function() {  
-    gulp.src('public/javascripts/qa-app.js')
-        //.pipe(concat('qa-app.min.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('public/dist/js'));
+        .pipe(gulp.dest('public/dist/css'));
 });
 
 gulp.task('browser-sync', function() {
@@ -46,12 +38,12 @@ gulp.task('browser-sync', function() {
 
 // Concatenate & Minify JS
  gulp.task('scripts', function() {
-    return gulp.src('public/javascripts/*.js')
+    return gulp.src(['public/javascripts/socket.js','public/javascripts/qa-app.js'])
         .pipe(concat('all.js'))
         .pipe(gulp.dest('dist'))
         .pipe(rename('all.min.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('dist/js'));
+        .pipe(gulp.dest('public/dist/js'));
 });
 
 // Watch Files For Changes
