@@ -85,7 +85,7 @@
 			<ul class="vragenlijst">
 				<li ng-repeat="quest in q | orderBy: '-upvotes' | limitTo: 10">
 					<h3>
-						<a href="/#/question/{{ quest._id }}">{{ quest.title }}</a>
+						<a href="/#/question/{{ quest._id }}">{{ quest.body }}</a>
 					</h3>
 					<!--
 					<a href="{{ quest.link }}">{{quest.link}}</a><br>
@@ -113,10 +113,10 @@
 			<ul class="vragenlijst">
 				<li ng-repeat="quest in q | reverse">
 					<h3>
-						<a href="/#/question/{{ quest._id }}">{{ quest.title }}</a>
+						<a href="/#/question/{{ quest._id }}">{{ quest.body }}</a>
 					</h3>
 					<p>
-						By Weichie &middot; 119 comments &middot; <span class="orange">1 minute ago</span>
+						By {{quest.author}}
 					</p>
 					<span ng-show="post.author">
 							posted by <a>{{post.author}}</a> |
