@@ -553,11 +553,10 @@ app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions'
 app.controller('AddDiscussionCtrl', ['$scope', 'discussions', 'auth', '$window', function($scope, discussions, auth, $window){
 	$scope.isLoggedIn = auth.isLoggedIn;
 	$scope.supportsGeo = $window.navigator;
-    $scope.position = null;    
+    $scope.position = null;
 
 	window.navigator.geolocation.getCurrentPosition(function(position) {
 		$.get('http://maps.googleapis.com/maps/api/geocode/json?address='+position.coords.latitude+','+position.coords.longitude+'&sensor=false', function(res){
-			console.log(res);
 			$scope.$apply(function() {
 				$scope.position = position.coords.latitude + ";" + position.coords.longitude;			
 				$scope.city = res.results[2].formatted_address;
