@@ -25,7 +25,7 @@ gulp.task('lint', function() {
 gulp.task('sass', function () {
     gulp.src(['public/sass/*.scss'])
         .pipe(sass({outputStyle: 'compressed'}))
-        .pipe(gulp.dest('public/dist/css'));
+        .pipe(gulp.dest('dist/css'));
 });
 
 //Minify JS
@@ -44,9 +44,21 @@ gulp.task('browser-sync', function() {
     });
 });
 
+// Concatenate & Minify JS
+ gulp.task('scripts', function() {
+    return gulp.src('public/javascripts/*.js')
+        .pipe(concat('all.js'))
+        .pipe(gulp.dest('dist'))
+        .pipe(rename('all.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('dist/js'));
+});
+
 // Watch Files For Changes
 gulp.task('watch', function() {
-    gulp.watch('public/javascripts/*.js', ['lint', 'bs-reload']);
+
+    // * 'views/*.ejs', 'public/javascripts/qa-app.js' */
+    gulp.watch('public/javascripts/*.js', ['lint', 'scripts', 'bs-reload']);
     gulp.watch('public/sass/*.scss', ['sass', 'bs-reload']);
     gulp.watch('views/*.ejs', ['bs-reload']);
 });
@@ -77,7 +89,7 @@ var nodemonOptions = {
     watch: ['bin/*', 'routes/*', 'app.js']
 };
 
-gulp.task('start', ['browser-sync', 'watch'], function(){
+gulp.task('start', ['browser-sync', 'watch', 'sass', 'scripts'], function(){
     nodemon(nodemonOptions)
         .on('restart', function(){
             console.log('restarted!');

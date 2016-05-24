@@ -292,6 +292,21 @@ app.controller('MainCtrl', ['$scope', 'questions', 'auth', '$window', 'discussio
 	discussions.getAll();
 	$scope.discussions = discussions.discussions;
 
+	var username = function(){
+		if( auth.currentUser() ){
+			return auth.currentUser();
+		} else {
+			return 'anonymous';
+		}
+	}
+
+	console.log($window.socket);
+
+	$window.socket.emit('joinDiscussion', {
+		discussion: 'homepage',
+		user: username(),
+	});
+
 	$scope.plusOne = function(question) {
 		questions.plusOne(question);
 	};
@@ -343,8 +358,6 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 	$scope.answer = {};
 	$scope.isClosed = discussion.closed;
 
-	$scope.people = $window.people;
-
 	var username = function(){
 		if( auth.currentUser() ){
 			return auth.currentUser();
@@ -357,10 +370,6 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 		discussion: discussion._id,
 		user: username(),
 	});
-
-	console.log( $window.socket ); 
-
-	console.log( discussion );
 
 	$scope.isLoggedIn = auth.isLoggedIn;
 	$scope.isAdmin = function(){
@@ -391,7 +400,7 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 		console.log( qindex );
 		console.log( aindex );
 
-		answer.discussion = discussion._id
+		answer.discussion = discussion._id;
 
 		questions.removeComment(answer)
 		.success(function(){
@@ -435,6 +444,50 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 	  });
 	  $scope.answer[index].body = '';
 	};
+
+
+	$window.socket.on('peopleNames', function(people){
+		console.log( people );
+
+		$scope.loggedInPeople = people;
+	});
+
+	Object.size = function(obj) {
+	    var size = 0, key;
+	    for (key in obj) {
+	        if (obj.hasOwnProperty(key)) size++;
+	    }
+	    return size;
+	};
+
+
+	$window.socket.on('rooms', function(rooms){
+		//console.log( rooms[discussion._id].sockets );
+
+		var peopleInDiscussion = [];
+		if( typeof rooms[discussion._id] !== 'undefined'){
+			for( _socket in rooms[discussion._id].sockets ){
+
+				console.log( 'scoket :' + _socket);
+
+				for(var i=0;i<$scope.loggedInPeople.length;i++){
+
+					console.log( 'person' + $scope.loggedInPeople[i].socket );
+
+					if( $scope.loggedInPeople[i].socket == _socket ){
+						console.log( $scope.loggedInPeople[i].user );
+						peopleInDiscussion.push( $scope.loggedInPeople[i].user );
+					}
+				}
+			}
+		}
+
+		console.log( peopleInDiscussion );
+		$scope.people = peopleInDiscussion.join();
+		$scope.$apply();
+	});
+
+
 }]);
 
 app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions', 'question', 'auth','checkIfImg', function($scope, $window, $stateParams,questions,question, auth,checkIfImg){
@@ -586,23 +639,62 @@ app.controller('NavCtrl', ['$scope', 'auth', '$window', function($scope, auth, $
 	$scope.isLoggedIn = auth.isLoggedIn;
 	$scope.currentUser = auth.currentUser;
 	$scope.logOut = auth.logOut;
+	$scope.rooms;
 
 	$scope.logOut = function(){
 		auth.logout();
 	};
+}]);
+
+app.controller('SidebarCtrl', ['$scope', 'discussions', '$window', function($scope, discussions, $window){
+	discussions.getAll();
+	$scope.discussions = discussions.discussions;
+	$scope.checkOnline = {
+	};
+
+	setTimeout(function(){
+		console.log( $scope.discussions );
+	}, 2500);
 
 	$window.socket.on('peopleNames', function(people){
 		console.log( people );
 	});
 
+	Object.size = function(obj) {
+	    var size = 0, key;
+	    for (key in obj) {
+	        if (obj.hasOwnProperty(key)) size++;
+	    }
+	    return size;
+	};
+
 	$window.socket.on('rooms', function(rooms){
 		console.log( rooms );
-	});
-}]);
+		$scope.rooms = rooms;
+		$scope.checkOnline = {
+		};
 
-app.controller('SidebarCtrl', ['$scope', 'discussions', function($scope, discussions){
-	discussions.getAll();
-	$scope.discussions = discussions.discussions;
+		for(var i=0;i<$scope.discussions.length;i++){
+
+			console.log( $scope.discussions[i]._id );
+
+			if( typeof rooms[$scope.discussions[i]._id] !== 'undefined' ){
+				$scope.checkOnline[$scope.discussions[i]._id] = Object.size( rooms[$scope.discussions[i]._id].sockets )
+			} else {
+				$scope.checkOnline[$scope.discussions[i]._id] = 0;
+			}
+		}
+
+		console.log( $scope.checkOnline );
+		$scope.$apply();
+
+		//$scope.$apply();
+
+		/*if( typeof rooms['574431e569f996b84cd3fc06'] !== 'undefined' ){
+			console.log( 'lel' );
+			console.log( Object.size( rooms['574431e569f996b84cd3fc06'].sockets ) );
+		}*/
+	});
 }]);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){
