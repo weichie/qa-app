@@ -233,12 +233,12 @@
 				<ul class="voting">
 					<li>{{ question.upvotes }}</li>
 					<li>
-						<a href="/#/discussion/{{ discussion._id }}" ng-click="plusOneAnswer(discussion, question)" class="upvotes">
+						<a href="/#/discussion/{{ discussion._id }}" ng-click="plusOne(question)" class="upvotes">
 							<i class="fa fa-thumbs-o-up"></i>
 						</a>
 					</li>
 					<li>
-						<a href="/#/discussion/{{ discussion._id }}" ng-click="minOneAnswer(discussion, question)" class="upvotes">
+						<a href="/#/discussion/{{ discussion._id }}" ng-click="minOne(question)" class="upvotes">
 							<i class="fa fa-thumbs-o-down"></i>
 						</a>
 					</li>
@@ -251,12 +251,12 @@
 						<ul class="voting">
 							<li>{{ answer_.upvotes }}</li>
 							<li>
-								<a href="/#/discussion/{{ discussion._id }}" ng-click="plusOneAnswer(discussion, question)" class="upvotes">
+								<a href="/#/discussion/{{ discussion._id }}" ng-click="plusOneAnswer(answer_, question)" class="upvotes">
 									<i class="fa fa-thumbs-o-up"></i>
 								</a>
 							</li>
 							<li>
-								<a href="/#/discussion/{{ discussion._id }}" ng-click="minOneAnswer(discussion, question)" class="upvotes">
+								<a href="/#/discussion/{{ discussion._id }}" ng-click="minOneAnswer(answer_, question)" class="upvotes">
 									<i class="fa fa-thumbs-o-down"></i>
 								</a>
 							</li>
