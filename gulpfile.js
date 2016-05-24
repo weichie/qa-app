@@ -22,16 +22,18 @@ gulp.task('lint', function() {
 });
 
 // Compile Our Sass
-/*gulp.task('sass', function() {
-    return gulp.src('public/sass/*.scss')
-        .pipe(sass())
-        .pipe(gulp.dest('public/stylesheets'));
-});*/
-
 gulp.task('sass', function () {
     gulp.src(['public/sass/*.scss'])
         .pipe(sass({outputStyle: 'compressed'}))
         .pipe(gulp.dest('public/dist/css'));
+});
+
+//Minify JS
+gulp.task('concat', function() {  
+    gulp.src('public/javascripts/qa-app.js')
+        //.pipe(concat('qa-app.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('public/dist/js'));
 });
 
 gulp.task('browser-sync', function() {
@@ -40,22 +42,6 @@ gulp.task('browser-sync', function() {
         port: 4000,
         ws: true,
     });
-});
-
-//Minify JS
-/* 
-gulp.task('compress', function() {
-  return gulp.src('public/javascripts/*.js')
-    .pipe(uglify())
-    .pipe(gulp.dest('public/dist/js'));
-});
-*/
-
-gulp.task('scripts', function() {
-  gulp.src(['./public/javascripts/qa-app.js', './public/javascripts/socket.js'])
-    .pipe(concat('all.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest('./dist/'))
 });
 
 // Watch Files For Changes
