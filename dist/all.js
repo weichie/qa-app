@@ -470,6 +470,30 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 		$scope.people = peopleInDiscussion.join();
 		$scope.$apply();
 	});
+
+	console.log( $scope.discussion );
+
+	$scope.plusOneAnswer = function(answer, question){
+		$window.socket.emit('changedQuestion', question);
+		questions.plusOneAnswer(question, answer);
+	};
+
+	$scope.minOneAnswer = function(answer, question){
+		$window.socket.emit('changedQuestion', question);
+		questions.minOneAnswer(question, answer);
+	};
+
+	$scope.plusOne = function(question) {
+		$window.socket.emit('changedQuestion', question);
+		$window.socket.emit('pushQuestions', question);
+		questions.plusOne(question);
+	};
+
+	$scope.minOne = function(question) {
+		$window.socket.emit('changedQuestion', question);
+		$window.socket.emit('pushQuestions', question);
+		questions.minOne(question);
+	};
 }]);
 
 app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions', 'question', 'auth', function($scope, $window, $stateParams,questions,question, auth){
