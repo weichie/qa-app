@@ -241,7 +241,8 @@
 	<script type="text/ng-template" id="/discussion.html">
 		<div class="discussion-page">
 			<h1>{{ discussion.title }}</h1>
-			<p class="author">Discussie gestart door {{ discussion.author }}</span>
+			<p class="author">Discussie gestart door <span>{{ discussion.author }}</span></p>
+			<p class="omgeving">Vanuit {{ discussion.city }} </p>
 			<button class="btn btn-default close-question pull-right" ng-click="close()" ng-hide="isClosed" ng-show="isAdmin()">close discussion</button>
 
 			<form ng-submit="addQuestion()" class="answer-form post-question" ng-hide="isClosed" ng-show="isLoggedIn()">

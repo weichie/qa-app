@@ -209,6 +209,12 @@ header {
   margin: 0;
   font-style: italic;
   color: #959595; }
+  .discussion-page .author span {
+    text-transform: capitalize; }
+
+.discussion-page .omgeving {
+  font-style: italic;
+  color: #959595; }
 
 .discussion-page .inspringen {
   margin-left: 5%;
