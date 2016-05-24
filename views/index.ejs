@@ -111,6 +111,7 @@
 		<section class="trending">
 			<h2>Trending discussions <span class="pull-right">top 10 discussions</span></h2>
 			<ul class="vragenlijst">
+        {{ people }}
 				<li ng-repeat="disc in discussions | orderBy: '-upvotes'">
 					<h3>
 						<a href="/#/discussion/{{ disc._id }}">{{ disc.title }}</a>

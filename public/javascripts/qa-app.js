@@ -341,6 +341,23 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 	$scope.answer = {};
 	$scope.isClosed = discussion.closed;
 
+	$scope.people = $window.people;
+
+	var username = function(){
+		if( auth.currentUser() ){
+			return auth.currentUser();
+		} else {
+			return 'anonymous';
+		}
+	}
+
+	$window.socket.emit('joinDiscussion', {
+		discussion: discussion._id,
+		user: username(),
+	});
+
+	console.log( $window.socket ); 
+
 	console.log( discussion );
 
 	$scope.isLoggedIn = auth.isLoggedIn;
@@ -352,11 +369,25 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 		}
 	}
 
+	// When entering the question page we want to check if there are any changes (via socket.io)
+	$window.socket.on('changedQuestion', function(q){
+		console.log('seems that someone changed this question...');
+		console.log(' man man man ');
+		console.log(q);
+
+		discussions.get( discussion._id ).then(function(data){
+			console.log( data );
+			$scope.discussion = data;
+			//$scope.findImages();
+		});
+		//$scope.$apply();
+	});
+
 	$scope.trash = function(answer, qindex, aindex){
 
 		console.log( answer );
-			console.log( qindex );
-			console.log( aindex );
+		console.log( qindex );
+		console.log( aindex );
 
 		answer.discussion = discussion._id
 
@@ -535,7 +566,7 @@ app.controller('AuthCtrl', ['$scope','$state','auth', function($scope,$state,aut
 	};
 }]);
 
-app.controller('NavCtrl', ['$scope', 'auth', function($scope, auth){
+app.controller('NavCtrl', ['$scope', 'auth', '$window', function($scope, auth, $window){
 	$scope.isLoggedIn = auth.isLoggedIn;
 	$scope.currentUser = auth.currentUser;
 	$scope.logOut = auth.logOut;
@@ -543,6 +574,14 @@ app.controller('NavCtrl', ['$scope', 'auth', function($scope, auth){
 	$scope.logOut = function(){
 		auth.logout();
 	};
+
+	$window.socket.on('peopleNames', function(people){
+		console.log( people );
+	});
+
+	$window.socket.on('rooms', function(rooms){
+		console.log( rooms );
+	});
 }]);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){

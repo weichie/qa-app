@@ -23,11 +23,15 @@ var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
+var people = [];
+
 server.listen('3005', function(){
   console.log("Web server listening on port 3005");
 });
 
-io.on('connection', function(socket){
+var nsp = io.of('/qa-app');
+
+nsp.on('connection', function(socket){
   console.log('a user connected');
   socket.on('disconnect', function(){
     console.log('user disconnected');
@@ -35,6 +39,40 @@ io.on('connection', function(socket){
 
   socket.on('chat message', function(msg){
     console.log('got message: ' + msg);
+  });
+
+  socket.on('joinDiscussion', function(data){
+    socket.join(data.discussion);
+
+    people.push({
+      socket: socket.id,
+      user: data.user
+    }); 
+    console.log( 'Someone (' + data.user + ') joined ' + data.discussion) ;
+    console.log( people );
+
+    //console.log( nsp.server.nsps['/qa-app'].adapter.rooms[data.discussion] ); //.adapter.rooms[data.discussion]
+
+     //console.log( nsp.server.nsps['/qa-app'].adapter.clients );
+     //console.log( nsp.connected );
+    // Loop through all people and see if still connected 
+    for(var i=0;people.length>i;i++){
+
+      //console.log( nsp.connected[people[i].socket] );
+      //console.log( people[i].socket );
+
+      if( typeof nsp.connected[people[i].socket] === 'undefined' ){
+        console.log( 'sliced::::' + people[i].socket );
+        people.splice(i,1);
+        console.log( people );
+      }
+    }
+
+    // socket.broadcast send to others
+    // nsp send to everyone
+    nsp.emit('peopleNames', people);
+    nsp.emit('rooms', nsp.server.nsps['/qa-app'].adapter.rooms);
+
   });
 
   /*socket.on('changedQuestion', function(question){

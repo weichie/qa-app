@@ -1,3 +1,3 @@
-var socket = io.connect();
+var socket = io('/qa-app');
 
 socket.emit('chat message', 'hello');
