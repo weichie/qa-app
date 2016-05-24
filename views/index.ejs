@@ -253,9 +253,9 @@
 		<div class="discussion-page">
 			<h1>{{ discussion.title }}</h1>
 			<p class="author">Discussie gestart door {{ discussion.author }}</span>
-			<button class="btn btn-default close-question pull-right" ng-show="isAdmin()">close discussion</button>
+			<button class="btn btn-default close-question pull-right" ng-click="close()" ng-hide="isClosed" ng-show="isAdmin()">close discussion</button>
 
-			<form ng-submit="addQuestion()" class="answer-form post-question" ng-show="isLoggedIn()">
+			<form ng-submit="addQuestion()" class="answer-form post-question" ng-hide="isClosed" ng-show="isLoggedIn()">
 				<h3>Post a new question</h3>
 
 				<div class="form-group">
@@ -319,7 +319,7 @@
 						<p class="comment" ng-bind-html="answer_.body | ifImage | sanitize"></p>
 					</div>
 
-					<form ng-submit="addAnswer(question._id,$index)" class="answer-form" ng-show="isLoggedIn()">
+					<form ng-submit="addAnswer(question._id,$index)" ng-hide="isClosed" class="answer-form" ng-show="isLoggedIn()">
 						<h4>Write a new answer</h4>
 
 						<div class="form-group">

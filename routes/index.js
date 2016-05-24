@@ -197,15 +197,7 @@ router.get('/discussion/:discussion', function(req,res){
 
 	req.discussion.populate({
 		path: 'questions',
-		populate: { 
-			path: 'answers',
-			populate: {
-				path: 'question',
-				populate: {
-					path: 'discussion'
-				}
-			}
-		}
+		populate: { path: 'answers' }
 	}, function(err, discussion){
 		if( err ) { return next(err); }
 		res.json(discussion);
@@ -247,6 +239,21 @@ router.put('/question/:question/answers/:answer/downvote', auth, function(req,re
 		res.json(question);
 	});
 });
+
+router.put('/discussion/:discussion/close', auth, function(req, res, next){
+
+	if( req.discussion.owner != req.payload._id ){
+		return res.status(401).json({message: 'You\'re not the owner of this discussion!' });
+	} else {
+		req.discussion.closeDiscussion(function(err, discussion){
+			if(err){ return next(err); }
+
+			res.json(discussion);
+		});
+	}
+
+});
+
 
 // Delete antwoord
 router.put('/answer/:answer', auth, function(req, res, next){
