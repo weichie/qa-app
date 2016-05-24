@@ -364,7 +364,13 @@
 				<label for="title">Discussion title</label>
 				<input type="text" class="form-control" id="title" ng-model="title" placeholder="title of your discussion">
 			</div>
-			<button type="submit" class="btn btn-primary">Post question</button>
+			<p ng-show="position" class="locatie-bepalen">
+				Discussie plaatsen vanuit {{ city }}
+			</p>
+			<p ng-hide="position" class="locatie-bepalen">
+				Bezig met locatie bepalen...
+			</p>
+			<button type="submit" ng-disabled="!position" class="btn btn-primary">Post question</button>
 		</form>
 
 		<div ng-hide="isLoggedIn()">

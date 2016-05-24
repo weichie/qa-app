@@ -402,8 +402,6 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 	  });
 	  $scope.answer[index].body = '';
 	};
-
-
 }]);
 
 app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions', 'question', 'auth','checkIfImg', function($scope, $window, $stateParams,questions,question, auth,checkIfImg){
@@ -481,13 +479,16 @@ app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions'
 app.controller('AddDiscussionCtrl', ['$scope', 'discussions', 'auth', '$window', function($scope, discussions, auth, $window){
 	$scope.isLoggedIn = auth.isLoggedIn;
 	$scope.supportsGeo = $window.navigator;
-    $scope.position = null;
+    $scope.position = null;    
 
 	window.navigator.geolocation.getCurrentPosition(function(position) {
-		$scope.$apply(function() {
-			$scope.position = Position.coords.lat;
-			console.log(position);
-		});
+		$.get('http://maps.googleapis.com/maps/api/geocode/json?address='+position.coords.latitude+','+position.coords.longitude+'&sensor=false', function(res){
+			console.log(res);
+			$scope.$apply(function() {
+				$scope.position = position.coords.latitude + ";" + position.coords.longitude;			
+				$scope.city = res.results[2].formatted_address;
+			});
+		});	
 	}, function(error) {
 		alert(error);
 	});
@@ -497,15 +498,14 @@ app.controller('AddDiscussionCtrl', ['$scope', 'discussions', 'auth', '$window',
 
 		discussions.create({
 			'title': $scope.title,
-			'location': "Elewijt"
+			'location': $scope.position,
+			'city': $scope.city
 		});
 
 		$window.socket.emit('pushQuestions');
 
 		$scope.title = '';
 	}
-
-	
 }]);
 
 app.controller('AddqCtrl', ['$scope', 'questions', 'auth' , function($scope, questions, auth){
