@@ -16,6 +16,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
 
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/javascripts/socket.js"></script>
+
 	<script src="/javascripts/qa-app.js"></script>
 </head>
 <body>
@@ -54,21 +58,21 @@
 			<h2>TOP 5 discussions</h2>
 			<ul>
 				<li ng-repeat="disc in discussions | orderBy: '-upvotes' | limitTo: 5">
-					<a href="/#/discussion/{{ disc._id }}">{{ disc.title }}</a>
+					<a href="/#/discussion/{{ disc._id }}">( {{ checkOnline[disc._id] }} ) {{ disc.title }}</a>
 				</li>
 			</ul>
 
 			<h2>Nearby discussions</h2>
 			<ul>
 				<li ng-repeat="disc in discussions | orderBy: '-upvotes' | limitTo: 5">
-					<a href="/#/discussion/{{ disc._id }}">{{ disc.title }}</a>
+					<a href="/#/discussion/{{ disc._id }}">( {{ checkOnline[disc._id] }} ) {{ disc.title }}</a>
 				</li>
 			</ul>
 
 			<h2>Recent discussions</h2>
 			<ul>
 				<li ng-repeat="disc in discussions | reverse | limitTo: 10">
-					<a href="/#/discussion/{{ disc._id }}">{{ disc.title }}</a>
+					<a href="/#/discussion/{{ disc._id }}">( {{ checkOnline[disc._id] }} ) {{ disc.title }}</a>
 				</li>
 			</ul>
     	</div><!-- ./sidebar -->
@@ -244,6 +248,7 @@
 			<h1>{{ discussion.title }}</h1>
 			<p class="author">Discussie gestart door <span>{{ discussion.author }}</span></p>
 			<p class="omgeving">Vanuit {{ discussion.city }} </p>
+      <p class="online">Aan het volgen: {{ people }}
 			<button class="btn btn-default close-question pull-right" ng-click="close()" ng-hide="isClosed" ng-show="isAdmin()">close discussion</button>
 
 			<form ng-submit="addQuestion()" class="answer-form post-question" ng-hide="isClosed" ng-show="isLoggedIn()">
@@ -405,8 +410,6 @@
 		</form>
 	</script>
 
-	<script src="/socket.io/socket.io.js"></script>
-    <script src="/javascripts/socket.js"></script>
 
 </body>
 </html>

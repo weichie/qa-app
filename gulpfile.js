@@ -37,20 +37,20 @@ gulp.task('browser-sync', function() {
 });
 
 // Concatenate & Minify JS
-/* gulp.task('scripts', function() {
-    return gulp.src('js/*.js')
+ gulp.task('scripts', function() {
+    return gulp.src('public/javascripts/*.js')
         .pipe(concat('all.js'))
         .pipe(gulp.dest('dist'))
         .pipe(rename('all.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('dist/js'));
-}); */ 
+});
 
 // Watch Files For Changes
 gulp.task('watch', function() {
 
     // * 'views/*.ejs', 'public/javascripts/qa-app.js' */
-    gulp.watch('public/javascripts/*.js', ['lint', 'bs-reload']);
+    gulp.watch('public/javascripts/*.js', ['lint', 'scripts', 'bs-reload']);
     gulp.watch('public/sass/*.scss', ['sass', 'bs-reload']);
     gulp.watch('views/*.ejs', ['bs-reload']);
 });

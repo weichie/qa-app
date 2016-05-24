@@ -31,31 +31,7 @@ server.listen('3005', function(){
 
 var nsp = io.of('/qa-app');
 
-nsp.on('connection', function(socket){
-  console.log('a user connected');
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
-
-  socket.on('chat message', function(msg){
-    console.log('got message: ' + msg);
-  });
-
-  socket.on('joinDiscussion', function(data){
-    socket.join(data.discussion);
-
-    people.push({
-      socket: socket.id,
-      user: data.user
-    }); 
-    console.log( 'Someone (' + data.user + ') joined ' + data.discussion) ;
-    console.log( people );
-
-    //console.log( nsp.server.nsps['/qa-app'].adapter.rooms[data.discussion] ); //.adapter.rooms[data.discussion]
-
-     //console.log( nsp.server.nsps['/qa-app'].adapter.clients );
-     //console.log( nsp.connected );
-    // Loop through all people and see if still connected 
+var loadPeeps = function(){
     for(var i=0;people.length>i;i++){
 
       //console.log( nsp.connected[people[i].socket] );
@@ -72,6 +48,60 @@ nsp.on('connection', function(socket){
     // nsp send to everyone
     nsp.emit('peopleNames', people);
     nsp.emit('rooms', nsp.server.nsps['/qa-app'].adapter.rooms);
+}
+
+nsp.on('connection', function(socket){
+
+  console.log('a user connected');
+
+  loadPeeps();
+
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+    loadPeeps();
+  });
+
+  socket.on('chat message', function(msg){
+    console.log('got message: ' + msg);
+  });
+
+  socket.on('joinDiscussion', function(data){
+
+    if( socket.lastRoom ){
+      socket.leave(socket.lastRoom);
+      socket.lastRoom = null;
+    }
+
+    socket.join(data.discussion);
+    socket.lastRoom = data.discussion;
+
+    socket.username = data.user;
+
+    console.log( 'Someone (' + data.user + ') joined ' + data.discussion) ;
+    console.log( people );
+
+    console.log( '-- ');
+    console.log( nsp.server.nsps['/qa-app'].adapter.rooms[data.discussion] ); //.adapter.rooms[data.discussion]
+    console.log( '-- ');
+
+    var unique = true;
+    for(var i=0;people.length>i;i++){
+      if( people[i].socket == socket.id && people[i].user == data.user ){
+        unique = false;
+      }
+      if( people[i].socket == socket.id ){
+        unique = false;
+      }
+    }
+
+    if(unique){
+      people.push({
+        socket: socket.id,
+        user: data.user
+      }); 
+    }
+    loadPeeps();
+    
 
   });
 
