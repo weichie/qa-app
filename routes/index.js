@@ -36,6 +36,7 @@ router.post('/discussion', auth, function(req,res,next){
 	var discussion = new Discussion(req.body);
 	discussion.author = req.payload.username;
 	discussion.owner = req.payload._id;
+	discussion.location = req.payload.location;
 	// En hier moeten we de vraag nog aan een discussie toevoegen... ? 
 
 	discussion.save(function(err,question){

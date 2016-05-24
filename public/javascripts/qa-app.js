@@ -388,6 +388,7 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 	  $scope.answer[index].body = '';
 	};
 
+
 }]);
 
 app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions', 'question', 'auth','checkIfImg', function($scope, $window, $stateParams,questions,question, auth,checkIfImg){
@@ -460,23 +461,36 @@ app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions'
 		$window.socket.emit('changedQuestion', question);
 		questions.minOneAnswer(question, answer);
 	};
-
 }]);
 
 app.controller('AddDiscussionCtrl', ['$scope', 'discussions', 'auth', '$window', function($scope, discussions, auth, $window){
 	$scope.isLoggedIn = auth.isLoggedIn;
+	$scope.supportsGeo = $window.navigator;
+    $scope.position = null;
+
+	window.navigator.geolocation.getCurrentPosition(function(position) {
+		$scope.$apply(function() {
+			$scope.position = Position.coords.lat;
+			console.log(position);
+		});
+	}, function(error) {
+		alert(error);
+	});
 
 	$scope.addDiscussion = function(){
 		if(!$scope.title || $scope.title === '') { return; }
 
 		discussions.create({
 			'title': $scope.title,
+			'location': "Elewijt"
 		});
 
 		$window.socket.emit('pushQuestions');
 
 		$scope.title = '';
 	}
+
+	
 }]);
 
 app.controller('AddqCtrl', ['$scope', 'questions', 'auth' , function($scope, questions, auth){
