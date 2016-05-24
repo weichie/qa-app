@@ -38,7 +38,7 @@ gulp.task('browser-sync', function() {
 
 // Concatenate & Minify JS
  gulp.task('scripts', function() {
-    return gulp.src(['public/javascripts/socket.js','public/javascripts/qa-app.js'])
+    return gulp.src(['public/javascripts/jquery-1.12.3.min.js','public/javascripts/socket.js','public/javascripts/qa-app.js'])
         .pipe(concat('all.js'))
         .pipe(gulp.dest('dist'))
         .pipe(rename('all.min.js'))
