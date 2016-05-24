@@ -433,7 +433,6 @@ app.controller('DiscussionCtrl', ['$scope', '$window', '$stateParams', 'discussi
 	  });
 	  $scope.answer[index].body = '';
 	};
-
 }]);
 
 app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions', 'question', 'auth','checkIfImg', function($scope, $window, $stateParams,questions,question, auth,checkIfImg){
@@ -506,17 +505,32 @@ app.controller('QuestionCtrl', ['$scope', '$window', '$stateParams', 'questions'
 		$window.socket.emit('changedQuestion', question);
 		questions.minOneAnswer(question, answer);
 	};
-
 }]);
 
 app.controller('AddDiscussionCtrl', ['$scope', 'discussions', 'auth', '$window', function($scope, discussions, auth, $window){
 	$scope.isLoggedIn = auth.isLoggedIn;
+	$scope.supportsGeo = $window.navigator;
+    $scope.position = null;    
+
+	window.navigator.geolocation.getCurrentPosition(function(position) {
+		$.get('http://maps.googleapis.com/maps/api/geocode/json?address='+position.coords.latitude+','+position.coords.longitude+'&sensor=false', function(res){
+			console.log(res);
+			$scope.$apply(function() {
+				$scope.position = position.coords.latitude + ";" + position.coords.longitude;			
+				$scope.city = res.results[2].formatted_address;
+			});
+		});	
+	}, function(error) {
+		alert(error);
+	});
 
 	$scope.addDiscussion = function(){
 		if(!$scope.title || $scope.title === '') { return; }
 
 		discussions.create({
 			'title': $scope.title,
+			'location': $scope.position,
+			'city': $scope.city
 		});
 
 		$window.socket.emit('pushQuestions');
@@ -582,6 +596,11 @@ app.controller('NavCtrl', ['$scope', 'auth', '$window', function($scope, auth, $
 	$window.socket.on('rooms', function(rooms){
 		console.log( rooms );
 	});
+}]);
+
+app.controller('SidebarCtrl', ['$scope', 'discussions', function($scope, discussions){
+	discussions.getAll();
+	$scope.discussions = discussions.discussions;
 }]);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){
